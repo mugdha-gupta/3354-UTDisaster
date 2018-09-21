@@ -1,13 +1,18 @@
 Functional Requirements for an SMS Messenger - 
 
-Messages:
-  - The messaging functionality should allow users to exchange text-based communication with other people. 
-      1.1 Users shall be able to send messages 
-      1.2 Users shall be able to receive messages
-      1.3 Users shall be able to view the messages they sent and received 		
-      1.4 Users should be able to view a list of messages that contain the specific keyword(s) that they typed in the search text field
-      1.5 Users shall be able to create chat groups of recipients (group messaging), depending on their preferences and the importance of the occasion (i.e: family, "Class XX Group", roommates)	
-      1.6 Users shall be able to send messages to multiple recipients
-      1.7 Users shall be able to receive messages from multiple recipients	
-      1.8  Messages will have a timestamp for when it was received.
-      1.9  Messages will have an option to be deleted.
+1. The messaging functionality should allow users to exchange text-based communication with other people. 
+  1.1 Users shall be able to send messages 
+  1.2 Users shall be able to receive messages
+  1.3 Users shall be able to view the messages they sent and received 		
+  1.4 Users should be able to view a list of messages that contain the specific keyword(s) that they typed in the search text field
+  1.5 Users shall be able to create chat groups of recipients (group messaging), depending on their preferences and the importance of the occasion (i.e: family, "Class XX Group", roommates)	
+  1.6 Users shall be able to send messages to multiple recipients
+  1.7 Users shall be able to receive messages from multiple recipients	
+  1.8  Messages will have a timestamp for when it was received.
+  1.9  Messages will have an option to be deleted.
+      
+2. Messages will be displayed in a user friendly format that allows for relevant messages to be quickly found.
+  2.1 Messages shall be listed in chronological order with the newest message at the bottom.
+  2.2 Messages shall be separated into threads based on the participants containing all messages sent and received by those participants
+  2.4 Threads shall be sorted in chronological order with the thread with the most recent activity at the top.
+  2.5 Messages sent from the user shall be distinct from the messages sent to the user.
