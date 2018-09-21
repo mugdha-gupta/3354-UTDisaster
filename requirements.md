@@ -3,7 +3,6 @@ Definitions,	Acronyms,	and	Abbreviations
 ## Functional Requirements for an SMS Messenger - 
 
 1. The messaging functionality should allow users to exchange text-based communication with other people. 
-
   1.1  Users shall be able to send messages (text, audio, visuals, etc.)  
   1.2  Users shall be able to receive messages (text, audio, visuals, etc.)  
   1.3  Users shall be able to view the messages they sent and received 		  
@@ -15,14 +14,12 @@ Definitions,	Acronyms,	and	Abbreviations
   1.9  Messages will have a timestamp for when it was received.  
   1.10 Users should be able to delete messages.  
 2. Messages will be displayed in a user friendly format that allows for relevant messages to be quickly found.
-
   2.1  Users shall be able to view messages in chronological order with the newest message at the bottom.  
   2.2  Users shall be able to view messages separated into threads based on the participants containing all messages sent and received by those participants  
   2.3  Users shall be able to view threads sorted in chronological order with the thread with the most recent activity at the top.  
   2.4  Users shall be able to see which messages they sent and which messages they received.  
   2.5  Users should be able to pin priority threads to the top of the list.  
 3. State the purpose, or sum up the requirements.
-
   3.1  Users shall be able to set a contact’s name to a number.  
   3.2  Users shall be able to set a contact’s picture to a number.  
   3.3  Users can change the theme of their messages.  
