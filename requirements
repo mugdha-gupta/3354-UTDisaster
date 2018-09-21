@@ -1,8 +1,8 @@
 Functional Requirements for an SMS Messenger - 
 
 1. The messaging functionality should allow users to exchange text-based communication with other people. 
-  1.1  Users shall be able to send messages 
-  1.2  Users shall be able to receive messages
+  1.1  Users shall be able to send messages (text, audio, visuals, etc.)
+  1.2  Users shall be able to receive messages (text, audio, visuals, etc.)
   1.3  Users shall be able to view the messages they sent and received 		
   1.4  Users should be able to view a list of messages that contain the specific keyword(s) that they typed in the search text field
   1.5  Users shall be able to create chat groups of recipients (group messaging), depending on their preferences and the importance of the occasion (i.e: family, "Class XX Group", roommates)	
