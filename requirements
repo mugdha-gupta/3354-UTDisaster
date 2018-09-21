@@ -9,7 +9,7 @@ Functional Requirements for an SMS Messenger -
   1.6 Users shall be able to send messages to multiple recipients
   1.7 Users shall be able to receive messages from multiple recipients	
   1.8  Messages will have a timestamp for when it was received.
- 	1.9  Messages will have an option to be deleted.
+  1.9  Messages will have an option to be deleted.
 
       
 2. Messages will be displayed in a user friendly format that allows for relevant messages to be quickly found.
