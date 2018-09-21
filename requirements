@@ -18,11 +18,11 @@ Functional Requirements for an SMS Messenger -
   2.2  Messages shall be separated into threads based on the participants containing all messages sent and received by those participants
   2.4  Threads shall be sorted in chronological order with the thread with the most recent activity at the top.
   2.5  Messages sent from the user shall be distinct from the messages sent to the user.
+  2.6  Users should be able to pin priority threads to the top of the list.
 
 
-Other: 
-    
 3. State the purpose, or sum up the requirements.
   3.1  Users shall be able to set a contact’s name to a number.
   3.2  Users shall be able to set a contact’s picture to a number.
   3.3  Users can change the theme of their messages.
+  3.4  Users should be able to block messages from other users.
