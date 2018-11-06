@@ -1,7 +1,7 @@
 // *** sources: https://www.tutorialspoint.com/android/android_sending_sms.htm
 // https://www.youtube.com/watch?v=asIPXTM6xms
 
-
+// Sending an SMS (message) via an android messenger app
 
 
 package com.utdisaster.utdmer;
