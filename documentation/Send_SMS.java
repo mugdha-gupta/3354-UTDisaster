@@ -40,7 +40,7 @@ import android.widget.Toast;
 
 
 
-public class MainActivity_3 extends Activity {
+public class Send_SMS extends Activity {
    private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 0 ; // variable is an int-constant defined by the app
 
    String phoneNum;
