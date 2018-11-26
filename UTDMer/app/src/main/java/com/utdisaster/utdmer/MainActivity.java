@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
             }
             requestPermissions(new String[]{Manifest.permission.READ_SMS}, PERMISSION_REQUEST.READ_SMS.ordinal());
         }  else {
+            Toast.makeText(this,"Thank you for granting us READ_SMS permissions.", Toast.LENGTH_SHORT).show();
         }
     }
 
