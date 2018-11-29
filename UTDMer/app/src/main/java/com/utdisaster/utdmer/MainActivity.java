@@ -1,25 +1,39 @@
 package com.utdisaster.utdmer;
 
 import android.Manifest;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import com.utdisaster.utdmer.adapater.ConversationAdapter;
+import com.utdisaster.utdmer.models.Sms;
+
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
+    ArrayAdapter arrayAdapter;
+    ListView messageView;
+
     public enum PERMISSION_REQUEST {
         READ_SMS
     }
 
-    public void getReadSmsPermission() {
+    private void getReadSmsPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
             if (shouldShowRequestPermissionRationale(Manifest.permission.READ_SMS)) {
                 Toast.makeText(this, "We need to read your SMS so that we can show them to you.", Toast.LENGTH_SHORT).show();
@@ -41,6 +55,35 @@ public class MainActivity extends AppCompatActivity {
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+    }
+
+    private List<String> getSmsInbox() {
+        ContentResolver contentResolver = getContentResolver();
+        Cursor smsInbox = contentResolver.query(Uri.parse("content://sms/inbox"), null, null, null, null);
+        int indexBody = smsInbox.getColumnIndex("body");
+        int indexAddress = smsInbox.getColumnIndex("address");
+        if (indexBody < 0 || !smsInbox.moveToFirst()) {
+            return null;
+        }
+        ArrayList<String> messages = new ArrayList<>();
+        do {
+
+            Sms objSms = new Sms();
+            objSms.setId(smsInbox.getString(smsInbox.getColumnIndexOrThrow("_id")));
+            objSms.setAddress(smsInbox.getString(smsInbox
+                    .getColumnIndexOrThrow("address")));
+            objSms.setMsg(smsInbox.getString(smsInbox.getColumnIndexOrThrow("body")));
+            objSms.setReadState(Boolean.valueOf(smsInbox.getString(smsInbox.getColumnIndex("read"))));
+            objSms.setTime(new Timestamp(Long.valueOf(smsInbox.getString(smsInbox.getColumnIndexOrThrow("date")))));
+            if (smsInbox.getString(smsInbox.getColumnIndexOrThrow("type")).contains("1")) {
+                objSms.setFolderName("inbox");
+            } else {
+                objSms.setFolderName("sent");
+            }
+            messages.add(objSms.toString());
+        } while (smsInbox.moveToNext());
+
+        return messages;
     }
 
     @Override
