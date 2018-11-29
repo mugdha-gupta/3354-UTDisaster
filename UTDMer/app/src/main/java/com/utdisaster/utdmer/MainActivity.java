@@ -91,8 +91,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getReadSmsPermission();
-
-
+        List<String> messageList = getSmsInbox();
+        messageView = (ListView) findViewById(R.id._messageView);
+        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, messageList);
+        messageView.setAdapter(arrayAdapter);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
