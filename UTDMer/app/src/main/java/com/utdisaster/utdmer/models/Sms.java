@@ -60,13 +60,6 @@ public class Sms {
 
     @Override
     public String toString() {
-        return "Sms{" +
-                "id='" + id + '\'' +
-                ", address='" + address + '\'' +
-                ", msg='" + msg + '\'' +
-                ", readState=" + readState +
-                ", time=" + time +
-                ", folderName='" + folderName + '\'' +
-                '}';
+        return "Message From: " + address + "\n" + msg + "\nRecieved At: " + time;
     }
 }
