@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -33,14 +34,15 @@ public class MainActivity extends AppCompatActivity {
         READ_SMS
     }
 
-    private void getReadSmsPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
+    private boolean getReadSmsPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        }  else {
             if (shouldShowRequestPermissionRationale(Manifest.permission.READ_SMS)) {
                 Toast.makeText(this, "We need to read your SMS so that we can show them to you.", Toast.LENGTH_SHORT).show();
             }
             requestPermissions(new String[]{Manifest.permission.READ_SMS}, PERMISSION_REQUEST.READ_SMS.ordinal());
-        }  else {
-            Toast.makeText(this,"Thank you for granting us READ_SMS permissions.", Toast.LENGTH_SHORT).show();
+            return false;
         }
     }
 
@@ -49,6 +51,12 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == PERMISSION_REQUEST.READ_SMS.ordinal()) {
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this, "Read SMS permissions granted", Toast.LENGTH_SHORT).show();
+                List<String> messageList = getSmsInbox();
+                messageView = (ListView) findViewById(R.id._messageView);
+                arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, messageList);
+                messageView.setAdapter(arrayAdapter);
+                ViewGroup vg = findViewById (R.id._messageView);
+                vg.invalidate();
             } else {
                 Toast.makeText(this, "Read SMS permissions denied", Toast.LENGTH_SHORT).show();
             }
@@ -87,14 +95,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        if(getReadSmsPermission()) {
+            List<String> messageList = getSmsInbox();
+            messageView = (ListView) findViewById(R.id._messageView);
+            arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, messageList);
+            messageView.setAdapter(arrayAdapter);
+        }
+        else {
+            ArrayList<String> messageList = new ArrayList<>();
+            messageList.add("We need access to your SMS in order to display your messages");
+            messageList.add("Please relaunch the app to bring up the permission dialog");
+            messageView = (ListView) findViewById(R.id._messageView);
+            arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, messageList);
+            messageView.setAdapter(arrayAdapter);
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getReadSmsPermission();
-        List<String> messageList = getSmsInbox();
-        messageView = (ListView) findViewById(R.id._messageView);
-        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, messageList);
-        messageView.setAdapter(arrayAdapter);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
