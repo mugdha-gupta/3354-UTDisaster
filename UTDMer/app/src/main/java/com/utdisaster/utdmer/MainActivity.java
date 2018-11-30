@@ -19,7 +19,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.utdisaster.utdmer.adapater.ConversationAdapter;
 import com.utdisaster.utdmer.models.Sms;
 
 import java.sql.Timestamp;

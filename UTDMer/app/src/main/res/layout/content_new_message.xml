@@ -11,25 +11,19 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
         >
-        <MultiAutoCompleteTextView
-            android:id="@+id/autoCompleteContactView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:layout_alignParentTop="true"
-            android:hint="To"
-            />
         <EditText
-            android:id="@+id/messageField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="bottom"
             android:inputType="text"
             android:maxLines="4"
             android:minLines="1"
             android:layout_alignParentBottom="true"
-            android:hint="Message"
-            />
+            tools:text="@tools:sample/lorem"
+            >
+        </EditText>
     </RelativeLayout>
 
 
