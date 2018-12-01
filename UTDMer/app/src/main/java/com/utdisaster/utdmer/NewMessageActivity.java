@@ -1,6 +1,7 @@
 package com.utdisaster.utdmer;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.SmsManager;
 import android.text.Editable;
@@ -58,6 +59,9 @@ public class NewMessageActivity extends AppCompatActivity {
     public void sendSmsMessage(View v) {
         SmsManager smsManager = SmsManager.getDefault();
         smsManager.sendTextMessage(recipientField.getText().toString(), null, messageField.getText().toString(), null, null);
+        messageField.setText("");
+        Snackbar.make(v, "Message has been sent", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
     }
 
 }
