@@ -35,17 +35,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean getSmsPermissions(RequestCode requestCode) {
-        View view = findViewById(R.id.content);
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }  else {
-            if (shouldShowRequestPermissionRationale(Manifest.permission.READ_SMS)) {
-                Snackbar.make(view, "SMS permissions required because this is an SMS messenger.", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-            requestPermissions(new String[]{Manifest.permission.READ_SMS, Manifest.permission.SEND_SMS}, requestCode.ordinal());
-            return false;
+        switch(requestCode) {
+            case APPLICATION_LAUNCH:
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED) {
+                    return true;
+                }  else {
+                    requestPermissions(new String[]{Manifest.permission.READ_SMS}, requestCode.ordinal());
+                    return false;
+                }
+            case FAB_ACTION:
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
+                    return true;
+                }  else {
+                    requestPermissions(new String[]{Manifest.permission.SEND_SMS}, requestCode.ordinal());
+                    return false;
+                }
+            default: return false;
         }
     }
 
@@ -53,9 +58,7 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NotNull String permissions[], @NotNull int[] grantResults) {
         View view = findViewById(android.R.id.content);
 
-        if (grantResults.length == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-            Snackbar.make(view, "SMS permissions granted.", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+        if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             List<String> messageList;
             RequestCode code = RequestCode.values()[requestCode];
             switch (code) {
