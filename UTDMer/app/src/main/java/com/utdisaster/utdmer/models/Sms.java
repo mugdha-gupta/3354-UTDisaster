@@ -60,6 +60,19 @@ public class Sms {
 
     @Override
     public String toString() {
-        return "Message From: " + address + "\n" + msg + "\nRecieved At: " + time;
+        if("inbox".equals(folderName)) {
+            return "From: " + address + "\nMessage: " + msg + "\nTimestamp: " + time;
+        }
+        if("sent".equals(folderName)) {
+            return "To: " + address + "\nMessage: " + msg + "\nTimestamp: " + time;
+        }
+        return "Sms{" +
+                "id='" + id + '\'' +
+                ", address='" + address + '\'' +
+                ", msg='" + msg + '\'' +
+                ", readState=" + readState +
+                ", time=" + time +
+                ", folderName='" + folderName + '\'' +
+                '}';
     }
 }
