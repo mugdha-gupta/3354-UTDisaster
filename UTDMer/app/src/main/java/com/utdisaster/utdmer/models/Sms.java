@@ -60,11 +60,7 @@ public class Sms implements Comparable<Sms> {
 
     @Override
     public int compareTo(Sms obj) {
-        //ascending order
         return this.time.compareTo(obj.getTime());
-        //descending order
-        //return compareQuantity - this.quantity;
-
     }
 
     @Override

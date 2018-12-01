@@ -58,8 +58,10 @@ public class NewMessageActivity extends AppCompatActivity {
 
     public void sendSmsMessage(View v) {
         SmsManager smsManager = SmsManager.getDefault();
+        // Send message
         smsManager.sendTextMessage(recipientField.getText().toString(), null, messageField.getText().toString(), null, null);
         messageField.setText("");
+        // Notify user that message was sent
         Snackbar.make(v, "Message has been sent", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
     }
