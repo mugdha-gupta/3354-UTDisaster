@@ -16,16 +16,28 @@
             android:layout_alignParentTop="true"
             android:hint="@string/new_message_to"
             />
-        <EditText
-            android:id="@+id/messageField"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"
-            android:maxLines="4"
-            android:minLines="1"
             android:layout_alignParentBottom="true"
-            android:hint="@string/new_message_text"
-            android:autofillHints="@string/new_message_text"
-            />
+            android:orientation="horizontal">
+            <EditText
+                android:id="@+id/messageField"
+                android:layout_weight=".90"
+                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:autofillHints="@string/new_message_text"
+                android:hint="@string/new_message_text"
+                android:inputType="text"
+                android:maxLines="4"
+                android:minLines="1" />
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/new_message_send" />
+
+        </LinearLayout>
+
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
