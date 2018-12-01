@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".NewMessageActivity"
-    tools:showIn="@layout/activity_new_message">
-
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -18,7 +14,7 @@
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:layout_alignParentTop="true"
-            android:hint="To"
+            android:hint="@string/new_message_to"
             />
         <EditText
             android:id="@+id/messageField"
@@ -28,9 +24,8 @@
             android:maxLines="4"
             android:minLines="1"
             android:layout_alignParentBottom="true"
-            android:hint="Message"
+            android:hint="@string/new_message_text"
+            android:autofillHints="@string/new_message_text"
             />
     </RelativeLayout>
-
-
 </android.support.constraint.ConstraintLayout>
