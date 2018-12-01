@@ -147,7 +147,8 @@ public class Chat_View_Adapter extends BaseAdapter {
 
 
         String sendingEnd = msgConversation.get(position).getSender();
-
+     
+// setSender() public method is part of Android's IEmail.Message Class
         if (sendingEnd != null) {
             container.setSender(sendingEnd);
         }
