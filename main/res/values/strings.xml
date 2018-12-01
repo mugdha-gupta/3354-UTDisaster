@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Contacts</string>
+    <string name="contactExample">Contact Example</string>
+    <string name="messageExample">Message Example</string>
+    <string name="addContact">Add Contact</string>
+    <string name="contactName">Name</string>
+    <string name="contactNumber">Number</string>
+
+    <string name="enterName">enter name</string>
+    <string name="enterNumber">enter number</string>
+    <string name="enterMessage">enter message</string>
+
+    <string name="send">SEND</string>
+
+</resources>
