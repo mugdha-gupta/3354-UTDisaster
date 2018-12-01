@@ -17,7 +17,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.utdisaster.utdmer.models.Sms;
 
@@ -32,11 +31,11 @@ public class MainActivity extends AppCompatActivity {
     ListView messageView;
 
     enum RequestCode {
-        APPLICATION_LAUNCH, FAB_ACTION;
+        APPLICATION_LAUNCH, FAB_ACTION
     }
 
     private boolean getSmsPermissions(RequestCode requestCode) {
-        View view = findViewById(android.R.id.content);
+        View view = findViewById(R.id.content);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED) {
             return true;
