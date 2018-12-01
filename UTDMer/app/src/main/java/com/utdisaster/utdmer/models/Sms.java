@@ -2,7 +2,7 @@ package com.utdisaster.utdmer.models;
 
 import java.sql.Timestamp;
 
-public class Sms {
+public class Sms implements Comparable<Sms> {
     private String id;
     private String address;
     private String msg;
@@ -56,6 +56,15 @@ public class Sms {
 
     public void setFolderName(String folderName) {
         this.folderName = folderName;
+    }
+
+    @Override
+    public int compareTo(Sms obj) {
+        //ascending order
+        return this.time.compareTo(obj.getTime());
+        //descending order
+        //return compareQuantity - this.quantity;
+
     }
 
     @Override
