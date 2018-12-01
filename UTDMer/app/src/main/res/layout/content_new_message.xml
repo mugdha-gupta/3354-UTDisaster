@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         >
         <MultiAutoCompleteTextView
-            android:id="@+id/autoCompleteContactView"
+            android:id="@+id/recipientField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="1"

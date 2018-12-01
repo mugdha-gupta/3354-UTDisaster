@@ -1,7 +1,12 @@
 package com.utdisaster.utdmer;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.SmsManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -12,7 +17,7 @@ import android.widget.Toast;
 public class NewMessageActivity extends AppCompatActivity {
 
     Button sendButton;
-    TextView messageField;
+    TextView messageField, recipientField;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +25,9 @@ public class NewMessageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_message);
 
         messageField = findViewById(R.id.messageField);
+        recipientField = findViewById(R.id.recipientField);
+        sendButton = findViewById(R.id.sendNewMessage);
+
         messageField.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {            }
@@ -31,13 +39,17 @@ public class NewMessageActivity extends AppCompatActivity {
             }
         });
 
-        sendButton = findViewById(R.id.sendNewMessage);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Send Message: " + messageField.getText(), Toast.LENGTH_SHORT).show();
+                sendSmsMessage(v);
             }
         });
+    }
+
+    public void sendSmsMessage(View v) {
+        SmsManager smsManager = SmsManager.getDefault();
+        smsManager.sendTextMessage(recipientField.getText().toString(), null, messageField.getText().toString(), null, null);
     }
 
 }
