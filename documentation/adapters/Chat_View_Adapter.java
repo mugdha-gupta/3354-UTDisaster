@@ -136,6 +136,8 @@ public class Chat_View_Adapter extends BaseAdapter {
 
 
         container.setMsg(msgConversation.get(position).getMsg());
+     
+     // setTimestamp() part of the Interface PreparedStatement --> Javase Docs Oracle
         container.setTimestamp(msgConversation.get(position).getFormattedTime());
 
         // setElevation() part of the View Class
