@@ -24,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         View view = findViewById(android.R.id.content);
 
         if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            List<String> messageList;
+            List<Sms> messageList;
             RequestCode code = RequestCode.values()[requestCode];
             switch (code) {
                 case FAB_ACTION:
@@ -84,17 +85,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private List<String> getSmsInbox() {
+    private List<Sms> getSmsInbox() {
         ContentResolver contentResolver = getContentResolver();
         Cursor smsInbox = contentResolver.query(Uri.parse("content://sms/inbox"), null, null, null, null);
+        Cursor smsOutbox = contentResolver.query(Uri.parse("content://sms/sent"), null, null, null, null);
+        ArrayList<Sms> messages = new ArrayList<>();
         if(smsInbox != null) {
             int indexBody = smsInbox.getColumnIndex("body");
             if (indexBody < 0 || !smsInbox.moveToFirst()) {
                 return null;
             }
-            ArrayList<String> messages = new ArrayList<>();
             do {
-
                 Sms objSms = new Sms();
                 objSms.setId(smsInbox.getString(smsInbox.getColumnIndexOrThrow("_id")));
                 objSms.setAddress(smsInbox.getString(smsInbox
@@ -107,19 +108,44 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     objSms.setFolderName("sent");
                 }
-                messages.add(objSms.toString());
+                messages.add(objSms);
             } while (smsInbox.moveToNext());
             smsInbox.close();
-            return messages;
         }
-        return null;
+        if(smsOutbox != null) {
+            int indexBody = smsOutbox.getColumnIndex("body");
+            if (indexBody < 0 || !smsOutbox.moveToFirst()) {
+                return null;
+            }
+            do {
+                Sms objSms = new Sms();
+                objSms.setId(smsOutbox.getString(smsOutbox.getColumnIndexOrThrow("_id")));
+                objSms.setAddress(smsOutbox.getString(smsOutbox
+                        .getColumnIndexOrThrow("address")));
+                objSms.setMsg(smsOutbox.getString(smsOutbox.getColumnIndexOrThrow("body")));
+                objSms.setTime(new Timestamp(Long.valueOf(smsOutbox.getString(smsOutbox.getColumnIndexOrThrow("date")))));
+                if (smsOutbox.getString(smsOutbox.getColumnIndexOrThrow("type")).contains("1")) {
+                    objSms.setFolderName("inbox");
+                } else {
+                    objSms.setFolderName("sent");
+                }
+                messages.add(objSms);
+            } while (smsOutbox.moveToNext());
+            smsOutbox.close();
+        }
+        if(messages.isEmpty()){
+            return null;
+        }
+        Collections.sort(messages);
+        Collections.reverse(messages);
+        return messages;
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         if(getSmsPermissions(RequestCode.APPLICATION_LAUNCH)) {
-            List<String> messageList = getSmsInbox();
+            List<Sms> messageList = getSmsInbox();
             messageView = findViewById(R.id._messageView);
             if(messageList!=null) {
                 arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, messageList);
