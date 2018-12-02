@@ -1,30 +1,26 @@
 package com.utdisaster.utdmer;
 
 import android.Manifest;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.utdisaster.utdmer.models.Sms;
+import com.utdisaster.utdmer.utility.SmsUtility;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -41,11 +37,12 @@ public class MainActivity extends AppCompatActivity {
             // If permissions requested at application launch, we will need read permissions to display all sms
             case APPLICATION_LAUNCH:
                 // Check if permissions already granted
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED) {
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED
+                    && ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS) == PackageManager.PERMISSION_GRANTED){
                     return true;
                 }  else {
                 // Requests permissions if not granted
-                    requestPermissions(new String[]{Manifest.permission.READ_SMS}, requestCode.ordinal());
+                    requestPermissions(new String[]{Manifest.permission.READ_SMS, Manifest.permission.RECEIVE_SMS}, requestCode.ordinal());
                     return false;
                 }
             // If permissions requested by a FAB action, we will need send permissions to send a sms
@@ -66,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         // View to display snackbar message in
         View view = findViewById(android.R.id.content);
         // Check if permissions were granted
-        if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             RequestCode code = RequestCode.values()[requestCode];
             // Check request context
             switch (code) {
@@ -77,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case APPLICATION_LAUNCH:
                     // Populate message list if recent action was application launch
-                    List<Sms> messageList = getSmsInbox();
+                    List<Sms> messageList = SmsUtility.getSmsInbox(getApplicationContext());
                     if (messageList != null) {
                         // Find message view
                         messageView = findViewById(R.id._messageView);
@@ -98,63 +95,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Get SMS messages
-    private List<Sms> getSmsInbox() {
-        ContentResolver contentResolver = getContentResolver();
-        // Request receive sms
-        Cursor smsInbox = contentResolver.query(Uri.parse("content://sms/inbox"), null, null, null, null);
-        // Request sent sms
-        Cursor smsOutbox = contentResolver.query(Uri.parse("content://sms/sent"), null, null, null, null);
-        ArrayList<Sms> messages = new ArrayList<>();
-
-        // process received sms
-        if(smsInbox != null) {
-            // verify cursor is valid and in good state
-            int indexBody = smsInbox.getColumnIndex("body");
-            if (indexBody < 0 || !smsInbox.moveToFirst()) {
-                return null;
-            }
-            do {
-                // Parse cursor data to build sms obj
-                Sms objSms = new Sms();
-                objSms.setId(smsInbox.getString(smsInbox.getColumnIndexOrThrow("_id")));
-                objSms.setAddress(smsInbox.getString(smsInbox
-                        .getColumnIndexOrThrow("address")));
-                objSms.setMsg(smsInbox.getString(smsInbox.getColumnIndexOrThrow("body")));
-                objSms.setReadState(Boolean.valueOf(smsInbox.getString(smsInbox.getColumnIndex("read"))));
-                objSms.setTime(new Timestamp(Long.valueOf(smsInbox.getString(smsInbox.getColumnIndexOrThrow("date")))));
-                objSms.setFolderName("inbox");
-                messages.add(objSms);
-            } while (smsInbox.moveToNext());
-            smsInbox.close();
-        }
-        if(smsOutbox != null) {
-            int indexBody = smsOutbox.getColumnIndex("body");
-            if (indexBody < 0 || !smsOutbox.moveToFirst()) {
-                return null;
-            }
-            do {
-                Sms objSms = new Sms();
-                objSms.setId(smsOutbox.getString(smsOutbox.getColumnIndexOrThrow("_id")));
-                objSms.setAddress(smsOutbox.getString(smsOutbox
-                        .getColumnIndexOrThrow("address")));
-                objSms.setMsg(smsOutbox.getString(smsOutbox.getColumnIndexOrThrow("body")));
-                objSms.setTime(new Timestamp(Long.valueOf(smsOutbox.getString(smsOutbox.getColumnIndexOrThrow("date")))));
-                objSms.setFolderName("sent");
-                messages.add(objSms);
-            } while (smsOutbox.moveToNext());
-            smsOutbox.close();
-        }
-        if(messages.isEmpty()){
-            return null;
-        }
-        // Sort messages by timestamp
-        Collections.sort(messages);
-        // Reverse list to display most recent message on top
-        Collections.reverse(messages);
-        return messages;
-    }
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -162,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         // Request read permissions
         if(getSmsPermissions(RequestCode.APPLICATION_LAUNCH)) {
             // If granted, populate listview with messages
-            List<Sms> messageList = getSmsInbox();
+            List<Sms> messageList = SmsUtility.getSmsInbox(getApplicationContext());
             messageView = findViewById(R.id._messageView);
             if(messageList!=null) {
                 arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, messageList);
