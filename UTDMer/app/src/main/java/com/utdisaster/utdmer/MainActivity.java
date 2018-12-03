@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.utdisaster.utdmer.models.Sms;
 import com.utdisaster.utdmer.utility.SmsUtility;
@@ -125,6 +126,11 @@ public class MainActivity extends AppCompatActivity {
             arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, messageList);
             messageView.setAdapter(arrayAdapter);
         }
+
+        if( !Telephony.Sms.getDefaultSmsPackage(this).equals(getPackageName())) {
+            // Application is not default SMS app
+            requestDefaultSms();
+        }
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,6 +183,16 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void requestDefaultSms() {
+
+        Toast.makeText(this, "Please make UTDMer your default SMS application so that we can delete messages", Toast.LENGTH_LONG).show();
+        Intent intent =
+                new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
+        intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME,
+                getPackageName());
+        startActivity(intent);
     }
 
     //////
