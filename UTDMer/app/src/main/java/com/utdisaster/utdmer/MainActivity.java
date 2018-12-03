@@ -138,14 +138,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        if(getSmsPermissions(RequestCode.BROADCAST_RECEIVER)) {
-            // Request receiver for received sms messages
-            IntentFilter filter = new IntentFilter(Telephony.Sms.Intents.SMS_RECEIVED_ACTION);
-            registerReceiver(broadcaseReceiver, filter);
-        }
-
-
+        getSmsPermissions(RequestCode.BROADCAST_RECEIVER);
         // Activate Fab
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
