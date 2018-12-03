@@ -14,6 +14,16 @@ import java.util.List;
 
 public class SmsUtility {
 
+    public static boolean deleteSms(Context context, int id) {
+        try {
+            context.getContentResolver().delete(
+                    Uri.parse("content://sms/" + id), null, null);
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+
     private static Sms parseSmsCursor(Cursor c) {
         Sms sms = new Sms();
         sms.setId(c.getString(c.getColumnIndexOrThrow("_id")));
