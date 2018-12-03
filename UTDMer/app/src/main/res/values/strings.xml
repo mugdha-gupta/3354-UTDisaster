@@ -5,11 +5,19 @@
     <string name="addContact">Add Contact</string>
     <string name="contactName">Name</string>
     <string name="contactNumber">Number</string>
-
+    <string name="messages">Messages</string>
     <string name="enterName">enter name</string>
     <string name="enterNumber">enter number</string>
     <string name="enterMessage">enter message</string>
-
+    <string name="searchMessages">Search Messages</string>
+    <string name="enterMessageTS">What would you like to search?</string>
     <string name="send">SEND</string>
+    <string name="search">SEARCH</string>
+    <string name="UTDMer">UTDMer</string>
+    <string name="draft">SAVE AS DRAFT</string>
+    <string name="sendto">. SEND TO:  </string>
+    <string name="delete">DELETE X</string>
+    <string name="sendMessage">Send Message</string>
+
 
 </resources>
