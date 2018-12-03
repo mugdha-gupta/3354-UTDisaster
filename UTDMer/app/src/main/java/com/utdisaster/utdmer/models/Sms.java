@@ -66,10 +66,10 @@ public class Sms implements Comparable<Sms> {
     @Override
     public String toString() {
         if("inbox".equals(folderName)) {
-            return "From: " + address + "\nMessage: " + msg + "\nTimestamp: " + time;
+            return "From: " + address + "\tId: " + id + "\nMessage: " + msg + "\nTimestamp: " + time;
         }
         if("sent".equals(folderName)) {
-            return "To: " + address + "\nMessage: " + msg + "\nTimestamp: " + time;
+            return "To: " + address + "\tId: " + id + "\nMessage: " + msg + "\nTimestamp: " + time;
         }
         return "Sms{" +
                 "id='" + id + '\'' +
