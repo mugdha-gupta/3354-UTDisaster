@@ -1,6 +1,5 @@
 package com.utdisaster.utdmer.utility;
 
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -10,7 +9,6 @@ import android.provider.Telephony;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.utdisaster.utdmer.R;
 import com.utdisaster.utdmer.models.Sms;
 
 import java.sql.Timestamp;

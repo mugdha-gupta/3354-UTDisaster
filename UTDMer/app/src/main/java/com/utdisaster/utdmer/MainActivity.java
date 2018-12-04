@@ -24,8 +24,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    private ArrayAdapter arrayAdapter;
-    private ListView messageView;
 
     // Enum to keep track of where the user is when they are requested sms permission
     enum RequestCode {
@@ -96,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         SmsUtility.setContext(this.getApplicationContext());
-        messageView = findViewById(R.id._messageView);
+        ListView messageView = findViewById(R.id._messageView);
         SmsUtility.setMessageView(messageView);
         // Request read permissions
         if(getSmsPermissions(RequestCode.APPLICATION_LAUNCH)) {
@@ -108,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
             ArrayList<String> messageList = new ArrayList<>();
             messageList.add("We need access to your SMS in order to display your messages");
             messageList.add("Please relaunch the app to bring up the permission dialog");
-            arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, messageList);
+            ArrayAdapter arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, messageList);
             messageView.setAdapter(arrayAdapter);
         }
 
