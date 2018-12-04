@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+        <Button
+            android:id="@+id/saveDraftButton"
+            android:layout_width="94dp"
+            android:layout_height="65dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="51dp"
+            android:text="@string/save_as_draft" />
+
+        <MultiAutoCompleteTextView
+            android:id="@+id/recipientField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:hint="@string/new_message_to"
+            android:maxLines="1" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/messageField"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".90"
+                android:autofillHints="@string/new_message_text"
+                android:hint="@string/new_message_text"
+                android:inputType="text"
+                android:maxLines="4"
+                android:minLines="1" />
+
+            <Button
+                android:id="@+id/sendNewMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/new_message_send" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/getDraftButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="296dp"
+            android:layout_marginTop="54dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="409dp"
+            android:onClick="getDraft"
+            android:text="@string/get_draft" />
+
+
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>

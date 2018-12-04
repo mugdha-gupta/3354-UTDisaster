@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">UTDMer</string>
+    <string name="action_settings">Settings</string>
+    <string name="new_message_to">To</string>
+    <string name="new_message_text">Message</string>
+    <string name="new_message_send">Send</string>
+    <string name="save_as_draft">Save as draft</string>
+    <string name="get_draft">Get Draft</string>
+</resources>
