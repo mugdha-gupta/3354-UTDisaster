@@ -21,6 +21,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.utdisaster.utdmer.models.Sms;
+import com.utdisaster.utdmer.receiver.SmsReceiver;
 import com.utdisaster.utdmer.utility.SmsUtility;
 
 import org.jetbrains.annotations.NotNull;
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayAdapter arrayAdapter;
     private ListView messageView;
     // Create broadcast receiver that updates message view anytime a sms is received
-    private BroadcastReceiver broadcaseReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver smsReceiver = new SmsReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             updateMessageView();
@@ -96,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case BROADCAST_RECEIVER:
                     IntentFilter filter = new IntentFilter(Telephony.Sms.Intents.SMS_RECEIVED_ACTION);
-                    registerReceiver(broadcaseReceiver, filter);
+                    registerReceiver(smsReceiver, filter);
                     break;
                 default:
                     super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -111,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        SmsUtility.setContext(this.getApplicationContext());
 
         // Request read permissions
         if(getSmsPermissions(RequestCode.APPLICATION_LAUNCH)) {

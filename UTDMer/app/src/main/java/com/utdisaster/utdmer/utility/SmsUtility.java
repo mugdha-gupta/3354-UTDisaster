@@ -1,6 +1,7 @@
 package com.utdisaster.utdmer.utility;
 
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -14,7 +15,17 @@ import java.util.List;
 
 public class SmsUtility {
 
-    public static boolean deleteSms(Context context, int id) {
+    private static Context context;
+
+    public static void setContext(Context c) {
+        context = c;
+    }
+
+    public static Context getContext() {
+        return context;
+    }
+
+    public static boolean deleteSms(int id) {
         try {
             context.getContentResolver().delete(
                     Uri.parse("content://sms/" + id), null, null);
@@ -22,6 +33,16 @@ public class SmsUtility {
         } catch (Exception ex) {
             return false;
         }
+    }
+
+    public static void addNewMessage(Sms sms) {
+        ContentValues values = new ContentValues();
+        values.put("address", sms.getAddress());
+        values.put("body", sms.getMsg());
+        values.put("read", sms.isReadState());
+        values.put("date", sms.getTime().getTime());
+        values.put("type", sms.getFolderName());
+        context.getContentResolver().insert(Uri.parse("content://sms/inbox"), values);
     }
 
     private static Sms parseSmsCursor(Cursor c) {
