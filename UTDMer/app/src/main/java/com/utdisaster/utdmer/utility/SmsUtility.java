@@ -20,7 +20,9 @@ import java.util.List;
 
 public class SmsUtility {
 
+    // Application context
     private static Context context;
+    // ListView from mainActivity
     private static ListView messageView;
 
     public static void setContext(Context c) {
@@ -41,6 +43,7 @@ public class SmsUtility {
 
     public static boolean deleteSms(int id) {
         try {
+            // Delete message with matching id
             context.getContentResolver().delete(
                     Uri.parse("content://sms/" + id), null, null);
             return true;
@@ -69,6 +72,7 @@ public class SmsUtility {
         values.put("date", sms.getTime().getTime());
         values.put("type", 1);
         Uri uri = Telephony.Sms.Inbox.CONTENT_URI;
+        // Save message to content://sms
         context.getContentResolver().insert(uri, values);
     }
 

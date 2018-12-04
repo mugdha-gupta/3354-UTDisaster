@@ -36,16 +36,16 @@ public class SmsReceiver extends BroadcastReceiver {
                 // Build the message to show.
                 strMessage += "SMS from " + msgs[i].getOriginatingAddress();
                 strMessage += " :" + msgs[i].getMessageBody() + "\n";
-                // Log and display the SMS message.
-                Log.d(TAG, "onReceive: " + strMessage);
-                Toast.makeText(context, strMessage, Toast.LENGTH_LONG).show();
+                // Create Sms obj
                 Sms sms = new Sms();
                 sms.setAddress(msgs[i].getOriginatingAddress());
                 sms.setFolderName("inbox");
                 sms.setMsg(msgs[i].getMessageBody());
                 sms.setReadState(false);
                 sms.setTime(new Timestamp(System.currentTimeMillis()));
+                // Save message to device
                 SmsUtility.addNewMessage(sms);
+                // Update message list
                 SmsUtility.updateMessageView();
             }
         }
