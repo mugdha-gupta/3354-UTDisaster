@@ -1,10 +1,7 @@
 package com.utdisaster.utdmer;
 
 import android.Manifest;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.provider.Telephony;
@@ -20,25 +17,15 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.utdisaster.utdmer.models.Sms;
-import com.utdisaster.utdmer.receiver.SmsReceiver;
 import com.utdisaster.utdmer.utility.SmsUtility;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private ArrayAdapter arrayAdapter;
     private ListView messageView;
-    // Create broadcast receiver that updates message view anytime a sms is received
-    private BroadcastReceiver smsReceiver = new SmsReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            updateMessageView();
-        }
-    };
 
     // Enum to keep track of where the user is when they are requested sms permission
     enum RequestCode {
@@ -93,11 +80,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                     break;
                 case APPLICATION_LAUNCH:
-                        updateMessageView();
-                    break;
-                case BROADCAST_RECEIVER:
-                    IntentFilter filter = new IntentFilter(Telephony.Sms.Intents.SMS_RECEIVED_ACTION);
-                    registerReceiver(smsReceiver, filter);
+                        SmsUtility.updateMessageView();
                     break;
                 default:
                     super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -113,18 +96,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         SmsUtility.setContext(this.getApplicationContext());
-
+        messageView = findViewById(R.id._messageView);
+        SmsUtility.setMessageView(messageView);
         // Request read permissions
         if(getSmsPermissions(RequestCode.APPLICATION_LAUNCH)) {
             // If granted, populate listview with messages
-            updateMessageView();
+            SmsUtility.updateMessageView();
         }
         else {
             // If not granted, explain to the user why there is nothing to see
             ArrayList<String> messageList = new ArrayList<>();
             messageList.add("We need access to your SMS in order to display your messages");
             messageList.add("Please relaunch the app to bring up the permission dialog");
-            messageView = findViewById(R.id._messageView);
             arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, messageList);
             messageView.setAdapter(arrayAdapter);
         }
@@ -188,23 +171,5 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME,
                 getPackageName());
         startActivity(intent);
-    }
-
-    //////
-    //
-    // Reload message view with all sms messages
-    //
-    //////
-    private void updateMessageView() {
-        // Get list of messages
-        List<Sms> messageList = SmsUtility.getSmsInbox(getApplicationContext());
-        // Find message view
-        messageView = findViewById(R.id._messageView);
-        if(messageList!=null) {
-            // Create adapter to display message
-            arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, messageList);
-            // Replace message view with messages
-            messageView.setAdapter(arrayAdapter);
-        }
     }
 }

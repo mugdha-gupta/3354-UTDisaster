@@ -46,6 +46,7 @@ public class SmsReceiver extends BroadcastReceiver {
                 sms.setReadState(false);
                 sms.setTime(new Timestamp(System.currentTimeMillis()));
                 SmsUtility.addNewMessage(sms);
+                SmsUtility.updateMessageView();
             }
         }
     }

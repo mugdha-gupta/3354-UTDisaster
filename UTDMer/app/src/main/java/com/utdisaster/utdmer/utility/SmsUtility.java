@@ -1,11 +1,16 @@
 package com.utdisaster.utdmer.utility;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.provider.Telephony;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
+import com.utdisaster.utdmer.R;
 import com.utdisaster.utdmer.models.Sms;
 
 import java.sql.Timestamp;
@@ -16,6 +21,7 @@ import java.util.List;
 public class SmsUtility {
 
     private static Context context;
+    private static ListView messageView;
 
     public static void setContext(Context c) {
         context = c;
@@ -23,6 +29,14 @@ public class SmsUtility {
 
     public static Context getContext() {
         return context;
+    }
+
+    public static void setMessageView(ListView listView) {
+        messageView = listView;
+    }
+
+    public static ListView getMessageView() {
+        return messageView;
     }
 
     public static boolean deleteSms(int id) {
@@ -35,14 +49,27 @@ public class SmsUtility {
         }
     }
 
+    public static void updateMessageView() {
+        // Get list of messages
+        List<Sms> messageList = SmsUtility.getSmsInbox(context.getApplicationContext());
+        // Find message view
+        if(messageList!=null) {
+            // Create adapter to display message
+            ArrayAdapter arrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, messageList);
+            // Replace message view with messages
+            messageView.setAdapter(arrayAdapter);
+        }
+    }
+
     public static void addNewMessage(Sms sms) {
         ContentValues values = new ContentValues();
         values.put("address", sms.getAddress());
         values.put("body", sms.getMsg());
-        values.put("read", sms.isReadState());
+        values.put("read", "0");
         values.put("date", sms.getTime().getTime());
-        values.put("type", sms.getFolderName());
-        context.getContentResolver().insert(Uri.parse("content://sms/inbox"), values);
+        values.put("type", 1);
+        Uri uri = Telephony.Sms.Inbox.CONTENT_URI;
+        context.getContentResolver().insert(uri, values);
     }
 
     private static Sms parseSmsCursor(Cursor c) {
@@ -64,7 +91,7 @@ public class SmsUtility {
     }
 
     // Get SMS messages
-    public static List<Sms> getSmsInbox(Context context) {
+    private static List<Sms> getSmsInbox(Context context) {
         ContentResolver contentResolver = context.getContentResolver();
         // Request sms messages
         Cursor smsCursor = contentResolver.query(Uri.parse("content://sms"), null, null, null, null);
