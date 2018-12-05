@@ -60,20 +60,16 @@ public class Sms implements Comparable<Sms> {
 
     @Override
     public int compareTo(Sms obj) {
-        //ascending order
         return this.time.compareTo(obj.getTime());
-        //descending order
-        //return compareQuantity - this.quantity;
-
     }
 
     @Override
     public String toString() {
         if("inbox".equals(folderName)) {
-            return "From: " + address + "\nMessage: " + msg + "\nTimestamp: " + time;
+            return "From: " + address + "\tId: " + id + "\nMessage: " + msg + "\nTimestamp: " + time;
         }
         if("sent".equals(folderName)) {
-            return "To: " + address + "\nMessage: " + msg + "\nTimestamp: " + time;
+            return "To: " + address + "\tId: " + id + "\nMessage: " + msg + "\nTimestamp: " + time;
         }
         return "Sms{" +
                 "id='" + id + '\'' +
