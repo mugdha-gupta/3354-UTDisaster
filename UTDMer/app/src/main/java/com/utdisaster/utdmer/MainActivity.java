@@ -10,6 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     enum RequestCode {
         APPLICATION_LAUNCH, FAB_ACTION, BROADCAST_RECEIVER
     }
+
+    private static final String TAG = MainActivity.class.getName();
 
     private boolean getSmsPermissions(RequestCode requestCode) {
         switch(requestCode) {
@@ -65,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     //How to handle response to permission requests
     @Override
     public void onRequestPermissionsResult(int requestCode, @NotNull String permissions[], @NotNull int[] grantResults) {
-        // View to display snackbar message in
+        Log.v(TAG, "Permission request result: " + Arrays.toString(permissions) + ":" + Arrays.toString(grantResults));
         View view = findViewById(android.R.id.content);
         // Check if permissions were granted
         if (grantResults.length > 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -168,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
                 new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
         intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME,
                 getPackageName());
+        Log.v(TAG, "Requesting user set application as default SMS app");
         startActivity(intent);
     }
 }
