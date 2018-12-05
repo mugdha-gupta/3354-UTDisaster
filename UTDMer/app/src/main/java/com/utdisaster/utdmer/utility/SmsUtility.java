@@ -6,6 +6,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.Telephony;
+import android.telephony.SmsManager;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -22,6 +24,7 @@ public class SmsUtility {
     private static Context context;
     // ListView from mainActivity
     private static ListView messageView;
+    private static final String TAG = SmsUtility.class.getName();
 
     public static void setContext(Context c) {
         context = c;
@@ -50,6 +53,14 @@ public class SmsUtility {
         }
     }
 
+    public static void sendMessage(Sms sms) {
+        SmsManager smsManager = SmsManager.getDefault();
+        // Send message
+        smsManager.sendTextMessage(sms.getAddress(), null, sms.getMsg(), null, null);
+        // Save message
+        addNewMessage(sms);
+    }
+
     public static void updateMessageView() {
         // Get list of messages
         List<Sms> messageList = SmsUtility.getSmsInbox(context.getApplicationContext());
@@ -63,15 +74,34 @@ public class SmsUtility {
     }
 
     public static void addNewMessage(Sms sms) {
+        Uri uri = null;
         ContentValues values = new ContentValues();
         values.put("address", sms.getAddress());
         values.put("body", sms.getMsg());
-        values.put("read", "0");
-        values.put("date", sms.getTime().getTime());
-        values.put("type", 1);
-        Uri uri = Telephony.Sms.Inbox.CONTENT_URI;
+        if(sms.getTime() != null) {
+            values.put("date", sms.getTime().getTime());
+        } else {
+            values.put("date", System.currentTimeMillis());
+        }
+        if(sms.isReadState()) {
+            values.put("read", "1");
+        } else {
+            values.put("read", "0");
+        }
+        if("inbox".equals(sms.getFolderName())) {
+            values.put("type", 1);
+            uri = Telephony.Sms.Inbox.CONTENT_URI;
+        } else if("sent".equals(sms.getFolderName())) {
+            values.put("type", 0);
+            uri = Telephony.Sms.Sent.CONTENT_URI;
+        }
         // Save message to content://sms
-        context.getContentResolver().insert(uri, values);
+        if(uri != null) {
+            Log.v(TAG, "Saving message to " + sms.getFolderName());
+            context.getContentResolver().insert(uri, values);
+        } else {
+            Log.e(TAG, "Error saving message: " + sms);
+        }
     }
 
     private static Sms parseSmsCursor(Cursor c) {
