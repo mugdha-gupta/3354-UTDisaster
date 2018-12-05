@@ -1,10 +1,7 @@
 package com.utdisaster.utdmer;
 
 import android.Manifest;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.provider.Telephony;
@@ -13,35 +10,29 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
-import com.utdisaster.utdmer.models.Sms;
 import com.utdisaster.utdmer.utility.SmsUtility;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
-    private ArrayAdapter arrayAdapter;
-    private ListView messageView;
-    // Create broadcast receiver that updates message view anytime a sms is received
-    private BroadcastReceiver broadcaseReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            updateMessageView();
-        }
-    };
 
     // Enum to keep track of where the user is when they are requested sms permission
     enum RequestCode {
         APPLICATION_LAUNCH, FAB_ACTION, BROADCAST_RECEIVER
     }
+
+    private static final String TAG = MainActivity.class.getName();
 
     private boolean getSmsPermissions(RequestCode requestCode) {
         switch(requestCode) {
@@ -78,10 +69,9 @@ public class MainActivity extends AppCompatActivity {
     //How to handle response to permission requests
     @Override
     public void onRequestPermissionsResult(int requestCode, @NotNull String permissions[], @NotNull int[] grantResults) {
-        // View to display snackbar message in
-        View view = findViewById(android.R.id.content);
+        Log.v(TAG, "Permission request result: " + Arrays.toString(permissions) + ":" + Arrays.toString(grantResults));
         // Check if permissions were granted
-        if (grantResults.length > 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             RequestCode code = RequestCode.values()[requestCode];
             // Check request context
             switch (code) {
@@ -91,39 +81,40 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                     break;
                 case APPLICATION_LAUNCH:
-                        updateMessageView();
+                    SmsUtility.updateMessageView();
                     break;
                 case BROADCAST_RECEIVER:
-                    IntentFilter filter = new IntentFilter(Telephony.Sms.Intents.SMS_RECEIVED_ACTION);
-                    registerReceiver(broadcaseReceiver, filter);
+                    SmsUtility.updateMessageView();
                     break;
                 default:
                     super.onRequestPermissionsResult(requestCode, permissions, grantResults);
             }
-        } else{
-            // If permissions were denied, notify user
-            Snackbar.make(view, "SMS permissions denied.", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
         }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-
+        SmsUtility.setContext(this.getApplicationContext());
+        ListView messageView = findViewById(R.id._messageView);
+        SmsUtility.setMessageView(messageView);
         // Request read permissions
         if(getSmsPermissions(RequestCode.APPLICATION_LAUNCH)) {
             // If granted, populate listview with messages
-            updateMessageView();
+            SmsUtility.updateMessageView();
         }
         else {
             // If not granted, explain to the user why there is nothing to see
             ArrayList<String> messageList = new ArrayList<>();
             messageList.add("We need access to your SMS in order to display your messages");
             messageList.add("Please relaunch the app to bring up the permission dialog");
-            messageView = findViewById(R.id._messageView);
-            arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, messageList);
+            ArrayAdapter arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, messageList);
             messageView.setAdapter(arrayAdapter);
+        }
+
+        if( !Telephony.Sms.getDefaultSmsPackage(this).equals(getPackageName())) {
+            // Application is not default SMS app
+            requestDefaultSms();
         }
     }
     @Override
@@ -132,14 +123,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        if(getSmsPermissions(RequestCode.BROADCAST_RECEIVER)) {
-            // Request receiver for received sms messages
-            IntentFilter filter = new IntentFilter(Telephony.Sms.Intents.SMS_RECEIVED_ACTION);
-            registerReceiver(broadcaseReceiver, filter);
-        }
-
-
         // Activate Fab
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -179,21 +162,14 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    //////
-    //
-    // Reload message view with all sms messages
-    //
-    //////
-    private void updateMessageView() {
-        // Get list of messages
-        List<Sms> messageList = SmsUtility.getSmsInbox(getApplicationContext());
-        // Find message view
-        messageView = findViewById(R.id._messageView);
-        if(messageList!=null) {
-            // Create adapter to display message
-            arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, messageList);
-            // Replace message view with messages
-            messageView.setAdapter(arrayAdapter);
-        }
+    public void requestDefaultSms() {
+
+        Toast.makeText(this, "Please make UTDMer your default SMS application so that we can delete messages", Toast.LENGTH_LONG).show();
+        Intent intent =
+                new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
+        intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME,
+                getPackageName());
+        Log.v(TAG, "Requesting user set application as default SMS app");
+        startActivity(intent);
     }
 }

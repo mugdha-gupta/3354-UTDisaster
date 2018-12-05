@@ -10,6 +10,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.utdisaster.utdmer.models.Sms;
+import com.utdisaster.utdmer.utility.SmsUtility;
+
 public class NewMessageActivity extends AppCompatActivity {
 
     Button sendButton;
@@ -57,9 +60,12 @@ public class NewMessageActivity extends AppCompatActivity {
     }
 
     public void sendSmsMessage(View v) {
-        SmsManager smsManager = SmsManager.getDefault();
-        // Send message
-        smsManager.sendTextMessage(recipientField.getText().toString(), null, messageField.getText().toString(), null, null);
+        Sms sms = new Sms();
+        sms.setAddress(recipientField.getText().toString());
+        sms.setMsg(messageField.getText().toString());
+        sms.setFolderName("sent");
+        sms.setReadState(true);
+        SmsUtility.sendMessage(sms);
         messageField.setText("");
         // Notify user that message was sent
         Snackbar.make(v, "Message has been sent", Snackbar.LENGTH_LONG)
