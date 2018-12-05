@@ -105,7 +105,7 @@ public class SmsUtility {
         }
     }
 
-    private static Sms parseSmsCursor(Cursor c) {
+    public static Sms parseSmsCursor(Cursor c) {
         Sms sms = new Sms();
         sms.setId(c.getString(c.getColumnIndexOrThrow("_id")));
         sms.setAddress(c.getString(c
@@ -124,7 +124,7 @@ public class SmsUtility {
     }
 
     // Get SMS messages
-    private static List<Sms> getSmsInbox(Context context) {
+    public static List<Sms> getSmsInbox(Context context) {
         ContentResolver contentResolver = context.getContentResolver();
         // Request sms messages
         Cursor smsCursor = contentResolver.query(Uri.parse("content://sms"), null, null, null, null);

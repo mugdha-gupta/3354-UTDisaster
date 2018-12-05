@@ -18,14 +18,19 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.utdisaster.utdmer.models.Sms;
 import com.utdisaster.utdmer.utility.SmsUtility;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    private View messageView;
+    private ArrayAdapter<Sms> arrayAdapter;
 
     // Enum to keep track of where the user is when they are requested sms permission
     enum RequestCode {
@@ -138,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
     }
 
     @Override
@@ -162,24 +168,6 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-    //////
-    //
-    // Reload message view with all sms messages
-    //
-    //////
-    private void updateMessageView() {
-        // Get list of messages
-         List<Sms> messageList = SmsUtility.getSmsInbox(getApplicationContext());
-
-        // Find message view
-        messageView = findViewById(R.id._messageView);
-        if(messageList!=null) {
-            // Create adapter to display message
-            arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, messageList);
-            // Replace message view with messages
-            messageView.setAdapter(arrayAdapter);
-        }
 
     public void requestDefaultSms() {
 
