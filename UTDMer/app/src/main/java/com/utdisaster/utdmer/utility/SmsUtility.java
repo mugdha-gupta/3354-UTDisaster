@@ -10,6 +10,7 @@ import com.utdisaster.utdmer.models.Sms;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class SmsUtility {
@@ -60,7 +61,31 @@ public class SmsUtility {
         Collections.sort(messages);
         // Reverse list to display most recent message on top
         Collections.reverse(messages);
-        return messages;
+        HashMap<String, ArrayList<Sms>> conversations = new HashMap<>();
+        for(Sms message: messages){
+            ArrayList<Sms> prevMessages;
+
+            if(conversations.containsKey(message.getAddress())){
+                prevMessages = conversations.get(message.getAddress());
+                prevMessages.add(message);
+                conversations.put(message.getAddress(), prevMessages);
+            }
+
+            else{
+                prevMessages = new ArrayList<Sms>();
+                prevMessages.add(message);
+                conversations.put(message.getAddress(), prevMessages);
+            }
+        }
+
+        ArrayList<Sms> recentMessages = new ArrayList<>();
+        for(String address: conversations.keySet()){
+            recentMessages.add(conversations.get(address).get(0));
+        }
+        Collections.sort(recentMessages);
+        Collections.reverse(recentMessages);
+
+        return recentMessages;
     }
 
 }

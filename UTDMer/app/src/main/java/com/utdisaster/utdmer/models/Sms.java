@@ -9,15 +9,6 @@ public class Sms implements Comparable<Sms> {
     private boolean readState;
     private Timestamp time;
     private String folderName;
-    private String conversationId;
-
-    public String getConversationId() {
-        return conversationId;
-    }
-
-    public void setConversationId(String conversationId) {
-        this.conversationId = conversationId;
-    }
 
     public String getId() {
         return id;

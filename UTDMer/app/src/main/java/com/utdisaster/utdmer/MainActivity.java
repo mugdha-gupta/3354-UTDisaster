@@ -19,9 +19,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.utdisaster.utdmer.models.Conversation;
 import com.utdisaster.utdmer.models.Sms;
-import com.utdisaster.utdmer.utility.ConversationUtility;
 import com.utdisaster.utdmer.utility.SmsUtility;
 
 import org.jetbrains.annotations.NotNull;
@@ -188,20 +186,19 @@ public class MainActivity extends AppCompatActivity {
     //////
     private void updateMessageView() {
         // Get list of messages
-        // List<Sms> messageList = SmsUtility.getSmsInbox(getApplicationContext());
-
-//        if(messageList!=null) {
-//            // Create adapter to display message
-//            arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, messageList);
-//            // Replace message view with messages
-//            messageView.setAdapter(arrayAdapter);
-//        }
-
-
-        List<Conversation> conversationList = ConversationUtility.getCoversations(getApplicationContext());
+         List<Sms> messageList = SmsUtility.getSmsInbox(getApplicationContext());
 
         // Find message view
         messageView = findViewById(R.id._messageView);
+        if(messageList!=null) {
+            // Create adapter to display message
+            arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, messageList);
+            // Replace message view with messages
+            messageView.setAdapter(arrayAdapter);
+        }
+
+
+
 
 
 
