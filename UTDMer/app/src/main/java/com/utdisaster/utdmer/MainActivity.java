@@ -18,14 +18,19 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.utdisaster.utdmer.models.Sms;
 import com.utdisaster.utdmer.utility.SmsUtility;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    private View messageView;
+    private ArrayAdapter<Sms> arrayAdapter;
 
     // Enum to keep track of where the user is when they are requested sms permission
     enum RequestCode {
@@ -138,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
     }
 
     @Override
@@ -161,6 +167,7 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 
     public void requestDefaultSms() {
 

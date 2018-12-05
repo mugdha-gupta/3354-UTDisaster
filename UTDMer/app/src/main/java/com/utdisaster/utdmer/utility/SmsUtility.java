@@ -16,6 +16,7 @@ import com.utdisaster.utdmer.models.Sms;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class SmsUtility {
@@ -104,7 +105,7 @@ public class SmsUtility {
         }
     }
 
-    private static Sms parseSmsCursor(Cursor c) {
+    public static Sms parseSmsCursor(Cursor c) {
         Sms sms = new Sms();
         sms.setId(c.getString(c.getColumnIndexOrThrow("_id")));
         sms.setAddress(c.getString(c
@@ -123,7 +124,7 @@ public class SmsUtility {
     }
 
     // Get SMS messages
-    private static List<Sms> getSmsInbox(Context context) {
+    public static List<Sms> getSmsInbox(Context context) {
         ContentResolver contentResolver = context.getContentResolver();
         // Request sms messages
         Cursor smsCursor = contentResolver.query(Uri.parse("content://sms"), null, null, null, null);
@@ -150,7 +151,31 @@ public class SmsUtility {
         Collections.sort(messages);
         // Reverse list to display most recent message on top
         Collections.reverse(messages);
-        return messages;
+        HashMap<String, ArrayList<Sms>> conversations = new HashMap<>();
+        for(Sms message: messages){
+            ArrayList<Sms> prevMessages;
+
+            if(conversations.containsKey(message.getAddress())){
+                prevMessages = conversations.get(message.getAddress());
+                prevMessages.add(message);
+                conversations.put(message.getAddress(), prevMessages);
+            }
+
+            else{
+                prevMessages = new ArrayList<Sms>();
+                prevMessages.add(message);
+                conversations.put(message.getAddress(), prevMessages);
+            }
+        }
+
+        ArrayList<Sms> recentMessages = new ArrayList<>();
+        for(String address: conversations.keySet()){
+            recentMessages.add(conversations.get(address).get(0));
+        }
+        Collections.sort(recentMessages);
+        Collections.reverse(recentMessages);
+
+        return recentMessages;
     }
 
 }
