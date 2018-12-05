@@ -23,6 +23,7 @@ import com.utdisaster.utdmer.utility.SmsUtility;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -69,9 +70,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NotNull String permissions[], @NotNull int[] grantResults) {
         Log.v(TAG, "Permission request result: " + Arrays.toString(permissions) + ":" + Arrays.toString(grantResults));
-        View view = findViewById(android.R.id.content);
         // Check if permissions were granted
-        if (grantResults.length > 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             RequestCode code = RequestCode.values()[requestCode];
             // Check request context
             switch (code) {
@@ -81,15 +81,14 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                     break;
                 case APPLICATION_LAUNCH:
-                        SmsUtility.updateMessageView();
+                    SmsUtility.updateMessageView();
+                    break;
+                case BROADCAST_RECEIVER:
+                    SmsUtility.updateMessageView();
                     break;
                 default:
                     super.onRequestPermissionsResult(requestCode, permissions, grantResults);
             }
-        } else{
-            // If permissions were denied, notify user
-            Snackbar.make(view, "SMS permissions denied.", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
         }
     }
 
@@ -124,7 +123,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSmsPermissions(RequestCode.BROADCAST_RECEIVER);
         // Activate Fab
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
