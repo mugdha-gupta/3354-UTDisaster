@@ -2,8 +2,11 @@ package com.utdisaster.utdmer;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -35,12 +38,28 @@ public class ViewConversation extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         ListView conversationView = findViewById(R.id._conversationView);
-        List<Sms> conversationMessageList = SmsUtility.getConversation(address);
-        Collections.reverse(conversationMessageList);
-        if(conversationMessageList!=null) {
-            ArrayAdapter arrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, conversationMessageList);
-            conversationView.setAdapter(arrayAdapter);
-        }
+        SmsUtility.setMessageView(conversationView);
+        SmsUtility.setAddress(address);
+        SmsUtility.setContext(this.getApplicationContext());
+        SmsUtility.updateMessageView();
+
+        Button button = findViewById(R.id.sendNewMessage);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TextView editText = findViewById(R.id.messageField);
+                Sms sms = new Sms();
+                sms.setAddress(address);
+                sms.setMsg(editText.getText().toString());
+                sms.setFolderName("sent");
+                sms.setReadState(true);
+                SmsUtility.sendMessage(sms);
+                editText.setText("");
+                // Notify user that message was sent
+                Snackbar.make(v, "Message has been sent", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
 
 
     }
