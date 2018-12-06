@@ -75,32 +75,38 @@ public class NewMessageActivity extends AppCompatActivity {
                 .setAction("Action", null).show();
     }
 
+    //save draft function by using hashmap to store values
     public void saveDraft(View v) {
         String phoneNumber = recipientField.getText().toString();
         String draftText = messageField.getText().toString();
         hmap.put(phoneNumber,draftText);
 
+        // Notify user that draft was saved
         Snackbar.make(v, "Draft Saved", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
 
         messageField.setText("");
     }
 
+    //get draft function by hashmap to return values
     public void getDraft(View v){
         String draftKey = recipientField.getText().toString();
 
         String draft = hmap.get(draftKey);
         messageField.setText(draft);
 
+        // Notify user that draft was returned
         Snackbar.make(v, "Draft Returned", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
     }
 
+    //delete draft function by hashmap to remove values
     public void deleteDraft(View v){
         String phoneNumber = recipientField.getText().toString();
 
         hmap.remove(phoneNumber);
 
+        // Notify user that draft was deleted
         Snackbar.make(v, "Draft Deleted", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
     }

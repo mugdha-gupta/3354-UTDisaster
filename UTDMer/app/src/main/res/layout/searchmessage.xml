@@ -7,6 +7,10 @@
     android:padding="5dp"
     android:layout_gravity="center">
 
+    <!-- Search Message Layout -->
+    <!-- Pop up box with input space -->
+
+    <!-- close text button -->
     <TextView
         android:id="@+id/close"
         android:layout_width="30dp"
@@ -16,14 +20,14 @@
         android:text="X"
         android:textColor="@color/white" />
 
-
+    <!-- user input request -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="@string/enterMessageTS"
         android:textColor="@color/white" />
-
+    <!-- text input space -->
     <EditText
         android:id="@+id/editText4"
         android:layout_width="match_parent"
@@ -33,7 +37,7 @@
         android:textColorHint="@color/grey"
         android:inputType="textPersonName"
         android:textColor="@color/white"/>
-
+    <!-- search button -->
     <Button
         android:onClick="showSearchList"
         android:id="@+id/search"
