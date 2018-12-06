@@ -27,6 +27,7 @@
         <activity android:name=".NewMessageActivity" />
         <!-- Receivers to make applicaton a default sms app -->
         <!-- BroadcastReceiver that listens for incoming SMS messages -->
+        \
         <receiver
             android:name=".receiver.SmsReceiver"
             android:permission="android.permission.BROADCAST_SMS">
@@ -78,6 +79,8 @@
                 <data android:scheme="mmsto" />
             </intent-filter>
         </service>
+
+        <activity android:name=".ViewConversation"></activity>
     </application>
 
 </manifest>

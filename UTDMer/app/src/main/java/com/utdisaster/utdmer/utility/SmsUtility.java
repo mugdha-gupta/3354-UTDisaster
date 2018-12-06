@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.provider.Telephony;
 import android.telephony.SmsManager;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.utdisaster.utdmer.models.Sms;
@@ -19,12 +18,15 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-public class SmsUtility {
 
+public class SmsUtility {
+//    public static final String EXTRA_MESSAGE = "com.utdisaster.utdmer.MESSAGE";
     // Application context
     private static Context context;
     // ListView from mainActivity
     private static ListView messageView;
+    private static HashMap<String, ArrayList<Sms>> conversations;
+
     private static final String TAG = SmsUtility.class.getName();
 
     public static void setContext(Context c) {
@@ -62,16 +64,11 @@ public class SmsUtility {
         addNewMessage(sms);
     }
 
-    public static void updateMessageView() {
+    public static List<Sms> updateMessageView() {
         // Get list of messages
         List<Sms> messageList = SmsUtility.getSmsInbox(context.getApplicationContext());
-        // Find message view
-        if(messageList!=null) {
-            // Create adapter to display message
-            ArrayAdapter arrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, messageList);
-            // Replace message view with messages
-            messageView.setAdapter(arrayAdapter);
-        }
+        return messageList;
+
     }
 
     public static void addNewMessage(Sms sms) {
@@ -151,7 +148,8 @@ public class SmsUtility {
         Collections.sort(messages);
         // Reverse list to display most recent message on top
         Collections.reverse(messages);
-        HashMap<String, ArrayList<Sms>> conversations = new HashMap<>();
+
+        conversations = new HashMap<>();
         for(Sms message: messages){
             ArrayList<Sms> prevMessages;
 
@@ -178,4 +176,7 @@ public class SmsUtility {
         return recentMessages;
     }
 
+    public static List<Sms> getConversation(String address){
+        return conversations.get(address);
+    }
 }

@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -31,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
 
     private View messageView;
     private ArrayAdapter<Sms> arrayAdapter;
+    public static final String EXTRA_MESSAGE = "com.utdisaster.utdmer.MESSAGE";
+
 
     // Enum to keep track of where the user is when they are requested sms permission
     enum RequestCode {
@@ -106,7 +109,35 @@ public class MainActivity extends AppCompatActivity {
         // Request read permissions
         if(getSmsPermissions(RequestCode.APPLICATION_LAUNCH)) {
             // If granted, populate listview with messages
-            SmsUtility.updateMessageView();
+            List<Sms> messageList = SmsUtility.updateMessageView();
+
+            // Find message view
+             if(messageList!=null) {
+                // Create adapter to display message
+                ArrayAdapter arrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, messageList);
+                // Replace message view with messages
+                messageView.setAdapter(arrayAdapter);
+                // Set an item click listener for ListView
+                messageView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        // get selected message
+                        Sms selectedMessage = (Sms) parent.getItemAtPosition(position);
+
+                        // get address of selected message
+                        String addressSelected = selectedMessage.getAddress();
+
+                        // create intent to send address to view conversation activity
+                        Intent intent = new Intent(MainActivity.this, ViewConversation.class);
+                        intent.putExtra(EXTRA_MESSAGE, addressSelected);
+                        startActivity(intent);
+
+                    }
+
+                });
+             }
+
+
         }
         else {
             // If not granted, explain to the user why there is nothing to see
@@ -126,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Activate Fab
