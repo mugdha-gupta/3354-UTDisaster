@@ -183,5 +183,7 @@ public class SmsUtility {
         return recentMessages;
     }
 
-   
+    public static List<Sms> getConversation(String address){
+        return conversations.get(address);
+    }
 }
