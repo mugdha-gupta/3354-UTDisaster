@@ -26,6 +26,7 @@ public class SmsUtility {
     private static Context context;
     // ListView from mainActivity
     private static ListView messageView;
+    private static String address;
     private static HashMap<String, ArrayList<Sms>> conversations;
 
     private static final String TAG = SmsUtility.class.getName();
@@ -44,6 +45,14 @@ public class SmsUtility {
 
     public static ListView getMessageView() {
         return messageView;
+    }
+
+    public static String getAddress() {
+        return address;
+    }
+
+    public static void setAddress(String address) {
+        SmsUtility.address = address;
     }
 
     public static boolean deleteSms(int id) {
@@ -66,14 +75,23 @@ public class SmsUtility {
     }
 
     public static void updateMessageView() {
-        // Get list of messages
-        List<Sms> messageList = SmsUtility.getSmsInbox(context.getApplicationContext());
-        // Find message view
-        if(messageList!=null) {
-            // Create adapter to display message
-            ArrayAdapter arrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, messageList);
-            // Replace message view with messages
-            messageView.setAdapter(arrayAdapter);
+        if(address == null) {
+            // Get list of messages
+            List<Sms> messageList = SmsUtility.getSmsInbox(context.getApplicationContext());
+            // Find message view
+            if (messageList != null) {
+                // Create adapter to display message
+                ArrayAdapter arrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, messageList);
+                // Replace message view with messages
+                messageView.setAdapter(arrayAdapter);
+            }
+        } else {
+            List<Sms> conversationMessageList = SmsUtility.getConversation(address);
+            Collections.reverse(conversationMessageList);
+            if(conversationMessageList!=null) {
+                ArrayAdapter arrayAdapter = new ArrayAdapter<>(context.getApplicationContext(), android.R.layout.simple_list_item_1, conversationMessageList);
+                messageView.setAdapter(arrayAdapter);
+            }
         }
 
     }

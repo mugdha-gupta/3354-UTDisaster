@@ -106,9 +106,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {super.onStart();
-        SmsUtility.setContext(this.getApplicationContext());
         ListView messageView = findViewById(R.id._messageView);
         SmsUtility.setMessageView(messageView);
+        SmsUtility.setAddress(null);
+        SmsUtility.setContext(this.getApplicationContext());
         // Request read permissions
         if(getSmsPermissions(RequestCode.APPLICATION_LAUNCH)) {
             // If granted, populate listview with messages
