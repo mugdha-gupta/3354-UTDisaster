@@ -8,13 +8,12 @@
 
 
 
-    <MultiAutoCompleteTextView
-        android:id="@+id/recipientField"
+    <TextView
+        android:id="@+id/recipientText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:maxLines="1"
+        android:textAlignment="center"
         android:layout_alignParentTop="true"
-        android:hint="@string/new_message_to"
         />
 
     <ListView
@@ -22,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_above="@id/messageLayout"
         android:stackFromBottom="true"
-        android:layout_below="@id/recipientField"
+        android:layout_below="@id/recipientText"
         android:layout_height="wrap_content"></ListView>
 
 
