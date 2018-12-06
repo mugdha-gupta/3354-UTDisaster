@@ -1,8 +1,11 @@
 package com.utdisaster.utdmer;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.provider.Telephony;
 import android.support.design.widget.FloatingActionButton;
@@ -16,7 +19,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.utdisaster.utdmer.models.Sms;
@@ -29,7 +34,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
+    Dialog search;
     private View messageView;
     private ArrayAdapter<Sms> arrayAdapter;
     public static final String EXTRA_MESSAGE = "com.utdisaster.utdmer.MESSAGE";
@@ -157,11 +162,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        search = new Dialog(this);
         // Activate Fab
-        FloatingActionButton fab = findViewById(R.id.fab);
+
+        Button fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -177,6 +181,32 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+
+
+
+    public void showSearchList(View view) {
+        Intent intent = new Intent(this, SearchList.class);
+        startActivity(intent);
+    }
+
+    public void showSearch(View view){
+        TextView close;
+        Button searchB;
+        search.setContentView(R.layout.searchmessage);
+        close= search.findViewById(R.id.close);
+        searchB = search.findViewById(R.id.search);
+        close.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                search.dismiss();
+            }
+        });
+
+        search.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        search.show();
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
