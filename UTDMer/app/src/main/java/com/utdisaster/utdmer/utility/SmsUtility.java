@@ -157,30 +157,7 @@ public class SmsUtility {
 
     // Get SMS messages
     public static List<Sms> getSmsInbox(Context context) {
-        ContentResolver contentResolver = context.getContentResolver();
-        // Request sms messages
-        Cursor smsCursor = contentResolver.query(Uri.parse("content://sms"), null, null, null, null);
-        ArrayList<Sms> messages = new ArrayList<>();
-
-        // process received sms
-        if(smsCursor != null) {
-            // verify cursor is valid and in good state
-            int indexBody = smsCursor.getColumnIndex("body");
-            if (indexBody < 0 || !smsCursor.moveToFirst()) {
-                return null;
-            }
-            do {
-                // Parse cursor data to build sms obj
-                Sms sms = parseSmsCursor(smsCursor);
-                messages.add(sms);
-            } while (smsCursor.moveToNext());
-            smsCursor.close();
-        }
-        if(messages.isEmpty()){
-            return null;
-        }
-        // Sort messages by timestamp
-        Collections.sort(messages);
+        List<Sms> messages = getAllMessages(context);
         // Reverse list to display most recent message on top
         Collections.reverse(messages);
 
