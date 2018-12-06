@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:background="@color/black">
-
+<!--Dark Design-->
+    <!--Delete Button-->
     <Button
         android:id="@+id/delete"
         android:layout_width="90dp"
@@ -29,6 +30,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.169" />
 
+    <!-- Get Draft Button -->
     <Button
         android:id="@+id/getDraftButton"
         android:layout_width="90dp"
@@ -58,7 +60,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent">
-
+<!-- Save Draft Button -->
         <Button
             android:id="@+id/saveDraftButton"
             android:layout_width="90dp"
@@ -71,7 +73,7 @@
             android:onClick="saveDraft"
             android:text="@string/save_as_draft"
             android:textColor="@color/white" />
-
+<!-- Text Field for phone number -->
         <MultiAutoCompleteTextView
             android:id="@+id/recipientField"
             android:layout_width="match_parent"
@@ -79,14 +81,15 @@
             android:layout_alignParentTop="true"
             android:hint="@string/new_message_to"
             android:maxLines="1"
-            android:textColorHint="@color/grey" />
+            android:textColorHint="@color/grey"
+            android:textColor="@color/white"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:orientation="horizontal">
-
+<!-- Text Field for messages -->
             <EditText
                 android:id="@+id/messageField"
                 android:layout_width="0dp"
@@ -97,8 +100,9 @@
                 android:inputType="text"
                 android:maxLines="4"
                 android:minLines="1"
-                android:textColorHint="@color/grey" />
-
+                android:textColorHint="@color/grey"
+                android:textColor="@color/white"/>
+<!-- Message send button -->
             <Button
                 android:id="@+id/sendNewMessage"
                 android:layout_width="90dp"
