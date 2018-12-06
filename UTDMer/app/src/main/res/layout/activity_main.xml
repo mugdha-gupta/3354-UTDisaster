@@ -23,8 +23,15 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <ListView
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@id/appbar"
+        android:id="@+id/search_bar"
+        android:maxLines="1"/>
+
+    <ListView
+        android:layout_below="@id/search_bar"
         android:id="@+id/_messageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
