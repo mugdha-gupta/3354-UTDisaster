@@ -23,15 +23,9 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/appbar"
-        android:id="@+id/search_bar"
-        android:maxLines="1"/>
 
     <ListView
-        android:layout_below="@id/search_bar"
+        android:layout_below="@id/appbar"
         android:id="@+id/_messageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
@@ -45,5 +39,17 @@
         android:layout_alignParentEnd="true"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@android:drawable/ic_dialog_email" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/search_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_margin="@dimen/fab_margin"
+        android:clickable="true"
+        app:srcCompat="@android:drawable/ic_menu_search" />
+
 
 </RelativeLayout>

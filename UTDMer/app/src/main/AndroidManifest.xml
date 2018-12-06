@@ -80,7 +80,8 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".ViewConversation"></activity>
+        <activity android:name=".ViewConversation" />
+        <activity android:name=".SearchMessageActivity"></activity>
     </application>
 
 </manifest>
