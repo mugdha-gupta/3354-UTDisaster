@@ -26,7 +26,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -101,43 +100,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onStart() {super.onStart();
         SmsUtility.setContext(this.getApplicationContext());
         ListView messageView = findViewById(R.id._messageView);
         SmsUtility.setMessageView(messageView);
         // Request read permissions
         if(getSmsPermissions(RequestCode.APPLICATION_LAUNCH)) {
             // If granted, populate listview with messages
-            List<Sms> messageList = SmsUtility.updateMessageView();
+            SmsUtility.updateMessageView();
 
-            // Find message view
-             if(messageList!=null) {
-                // Create adapter to display message
-                ArrayAdapter arrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, messageList);
-                // Replace message view with messages
-                messageView.setAdapter(arrayAdapter);
-                // Set an item click listener for ListView
-                messageView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        // get selected message
-                        Sms selectedMessage = (Sms) parent.getItemAtPosition(position);
+            messageView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    // get selected message
+                    Sms selectedMessage = (Sms) parent.getItemAtPosition(position);
 
-                        // get address of selected message
-                        String addressSelected = selectedMessage.getAddress();
+                    // get address of selected message
+                    String addressSelected = selectedMessage.getAddress();
 
-                        // create intent to send address to view conversation activity
-                        Intent intent = new Intent(MainActivity.this, ViewConversation.class);
-                        intent.putExtra(EXTRA_MESSAGE, addressSelected);
-                        startActivity(intent);
+                    // create intent to send address to view conversation activity
+                    Intent intent = new Intent(MainActivity.this, ViewConversation.class);
+                    intent.putExtra(EXTRA_MESSAGE, addressSelected);
+                    startActivity(intent);
 
-                    }
+                }
 
-                });
-             }
-
-
+            });
         }
         else {
             // If not granted, explain to the user why there is nothing to see
