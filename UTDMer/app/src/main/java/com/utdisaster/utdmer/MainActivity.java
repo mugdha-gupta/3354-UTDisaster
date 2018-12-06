@@ -176,6 +176,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        FloatingActionButton searchButton = findViewById(R.id._search_button);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, SearchMessageActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     @Override
