@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.provider.Telephony;
 import android.telephony.SmsManager;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.utdisaster.utdmer.models.Sms;
@@ -64,10 +65,16 @@ public class SmsUtility {
         addNewMessage(sms);
     }
 
-    public static List<Sms> updateMessageView() {
+    public static void updateMessageView() {
         // Get list of messages
         List<Sms> messageList = SmsUtility.getSmsInbox(context.getApplicationContext());
-        return messageList;
+        // Find message view
+        if(messageList!=null) {
+            // Create adapter to display message
+            ArrayAdapter arrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, messageList);
+            // Replace message view with messages
+            messageView.setAdapter(arrayAdapter);
+        }
 
     }
 
@@ -176,7 +183,5 @@ public class SmsUtility {
         return recentMessages;
     }
 
-    public static List<Sms> getConversation(String address){
-        return conversations.get(address);
-    }
+   
 }
