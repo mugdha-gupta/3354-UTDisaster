@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SearchMessageActivity">
+    tools:context=".SearchList">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,6 +13,7 @@
         android:orientation="horizontal"
         android:id="@+id/_search_layout">
         <EditText
+
             android:id="@+id/_search_text"
             android:layout_weight=".90"
             android:layout_height="match_parent"
@@ -25,7 +26,9 @@
             android:id="@+id/_search_button_enter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Search" />
+            android:text="Search"
+            android:background="@color/orange"
+            android:textColor="@color/white"/>
 
     </LinearLayout>
 

@@ -21,7 +21,7 @@ import java.util.List;
 
 
 public class SmsUtility {
-//    public static final String EXTRA_MESSAGE = "com.utdisaster.utdmer.MESSAGE";
+    //    public static final String EXTRA_MESSAGE = "com.utdisaster.utdmer.MESSAGE";
     // Application context
     private static Context context;
     // ListView from mainActivity
@@ -125,6 +125,34 @@ public class SmsUtility {
         }
 
         return sms;
+    }
+
+    public static List<Sms> getAllMessages(Context context){
+        ContentResolver contentResolver = context.getContentResolver();
+        // Request sms messages
+        Cursor smsCursor = contentResolver.query(Uri.parse("content://sms"), null, null, null, null);
+        ArrayList<Sms> messages = new ArrayList<>();
+
+        // process received sms
+        if(smsCursor != null) {
+            // verify cursor is valid and in good state
+            int indexBody = smsCursor.getColumnIndex("body");
+            if (indexBody < 0 || !smsCursor.moveToFirst()) {
+                return null;
+            }
+            do {
+                // Parse cursor data to build sms obj
+                Sms sms = parseSmsCursor(smsCursor);
+                messages.add(sms);
+            } while (smsCursor.moveToNext());
+            smsCursor.close();
+        }
+        if(messages.isEmpty()){
+            return null;
+        }
+
+        Collections.sort(messages);
+        return messages;
     }
 
     // Get SMS messages

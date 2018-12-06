@@ -1,5 +1,6 @@
 package com.utdisaster.utdmer;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -21,11 +22,17 @@ public class SearchList extends AppCompatActivity {
     private static Button searchButton;
     private static List<Sms> searchResults = new ArrayList<>();
     private ArrayAdapter arrayAdapter;
+    String message;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_message);
+        setContentView(R.layout.activity_search_list);
+
+
+        Intent intent = getIntent();
+        message = intent.getStringExtra(MainActivity.SEARCH_MESSAGE);
+
 
         searchEditText = (EditText) findViewById(R.id._search_text);
         searchResultListView = (ListView) findViewById(R.id._search_result_list_view);
@@ -38,12 +45,15 @@ public class SearchList extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        searchEditText.setText(message);
+
+
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                String searchString = searchEditText.getText().toString();
+                String searchString = message;
                 List<Sms> allMessages = SmsUtility.getAllMessages(getApplicationContext());
 
                 if(searchResults != null){
@@ -61,9 +71,10 @@ public class SearchList extends AppCompatActivity {
                     searchResultListView.setAdapter(arrayAdapter);
                 }
             }
+
         });
 
-
+        searchButton.performClick();
 
     }
 

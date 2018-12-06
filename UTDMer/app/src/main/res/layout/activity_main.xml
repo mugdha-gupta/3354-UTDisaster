@@ -7,8 +7,9 @@
     android:id="@+id/_mainLayout"
     tools:context=".MainActivity"
     android:background="@color/white">
+<!-- Main Activity -->
 
-
+    <!-- List of Messages -->
     <ListView
         android:id="@+id/_messageView"
         android:layout_width="match_parent"
@@ -20,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-
+<!-- Layout for buttons -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="58dp"
@@ -45,6 +46,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0">
 
+            <!-- Opens Message page -->
             <Button
                 android:id="@+id/fab"
                 android:layout_width="match_parent"
@@ -69,8 +71,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0">
 
+            <!-- Opens Search Message pop up -->
             <Button
-
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/blue"

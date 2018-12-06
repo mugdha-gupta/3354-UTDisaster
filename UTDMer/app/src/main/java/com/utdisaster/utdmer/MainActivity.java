@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,7 +33,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+
 public class MainActivity extends AppCompatActivity {
+    public static final String SEARCH_MESSAGE = "com.utdisaster.utdmer.MESSAGE";
     Dialog search;
     private View messageView;
     private ArrayAdapter<Sms> arrayAdapter;
@@ -146,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
             requestDefaultSms();
         }
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -175,6 +179,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void showSearchList(View view) {
         Intent intent = new Intent(this, SearchList.class);
+        EditText editText;
+
+        editText = search.findViewById(R.id.editSearch);
+        String message = editText.getText().toString();
+        intent.putExtra(SEARCH_MESSAGE, message);
+
         startActivity(intent);
     }
 
@@ -194,6 +204,9 @@ public class MainActivity extends AppCompatActivity {
         search.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         search.show();
     }
+
+
+
 
 
     @Override
