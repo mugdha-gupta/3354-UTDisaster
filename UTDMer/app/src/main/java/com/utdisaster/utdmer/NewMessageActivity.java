@@ -13,10 +13,13 @@ import android.widget.TextView;
 import com.utdisaster.utdmer.models.Sms;
 import com.utdisaster.utdmer.utility.SmsUtility;
 
+import java.util.HashMap;
+
 public class NewMessageActivity extends AppCompatActivity {
 
-    Button sendButton;
+    Button sendButton, saveButton, getDraft;
     TextView messageField, recipientField;
+    private static HashMap<String, String> hmap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +72,36 @@ public class NewMessageActivity extends AppCompatActivity {
         messageField.setText("");
         // Notify user that message was sent
         Snackbar.make(v, "Message has been sent", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
+    }
+
+    public void saveDraft(View v) {
+        String phoneNumber = recipientField.getText().toString();
+        String draftText = messageField.getText().toString();
+        hmap.put(phoneNumber,draftText);
+
+        Snackbar.make(v, "Draft Saved", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
+
+        messageField.setText("");
+    }
+
+    public void getDraft(View v){
+        String draftKey = recipientField.getText().toString();
+
+        String draft = hmap.get(draftKey);
+        messageField.setText(draft);
+
+        Snackbar.make(v, "Draft Returned", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
+    }
+
+    public void deleteDraft(View v){
+        String phoneNumber = recipientField.getText().toString();
+
+        hmap.remove(phoneNumber);
+
+        Snackbar.make(v, "Draft Deleted", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
     }
 
