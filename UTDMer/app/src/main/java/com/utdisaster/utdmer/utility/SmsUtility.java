@@ -111,8 +111,6 @@ public class SmsUtility {
         } else {
             Log.e(TAG, "Error saving message: " + sms);
         }
-
-        getInboxMessages(context);
     }
     public static List<Sms> getAllMessagesInMemory(Context context){
         ContentResolver contentResolver = context.getContentResolver();
