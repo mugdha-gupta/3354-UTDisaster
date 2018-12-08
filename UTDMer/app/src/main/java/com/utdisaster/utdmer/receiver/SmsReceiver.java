@@ -11,10 +11,12 @@ import com.utdisaster.utdmer.utility.SmsUtility;
 
 import java.sql.Timestamp;
 
+// Implements broadcast receiver to actually send messages
 public class SmsReceiver extends BroadcastReceiver {
     private static final String TAG = SmsReceiver.class.getSimpleName();
     public static final String pdu_type = "pdus";
 
+    // When a message is received, this function is called
     @Override
     public void onReceive(Context context, Intent intent) {
         // Get the SMS message.

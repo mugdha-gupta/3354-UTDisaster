@@ -172,27 +172,16 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-
-
-
-
-    public void showSearchList(View view) {
-        Intent intent = new Intent(this, SearchList.class);
-        EditText editText;
-
-        editText = search.findViewById(R.id.editSearch);
-        String message = editText.getText().toString();
-        intent.putExtra(SEARCH_MESSAGE, message);
-
-        startActivity(intent);
-    }
-
-    public void showSearch(View view){
+    // Shows a pop up search text box dialog to allow search
+    public void showSearchDialog(View view){
         TextView close;
         Button searchB;
+        // Get the layout view for dialog
         search.setContentView(R.layout.searchmessage);
         close= search.findViewById(R.id.close);
         searchB = search.findViewById(R.id.search);
+
+        // When close selected, close
         close.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -200,14 +189,31 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Set background transparent
         search.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        // Show the dialog
         search.show();
+    }
+
+    // When they search, go to the search activity
+    public void showSearchList(View view) {
+        Intent intent = new Intent(this, SearchList.class);
+        EditText editText;
+
+        // Add message in the intent so search activity knows what messages to display
+        editText = search.findViewById(R.id.editSearch);
+        String message = editText.getText().toString();
+        intent.putExtra(SEARCH_MESSAGE, message);
+
+        startActivity(intent);
     }
 
 
 
 
 
+
+    // standard method onCreateOptionsMenu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -215,6 +221,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    // returns true if the option was selected
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -230,10 +237,11 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
+    // Asks user to make this default Sms app
     public void requestDefaultSms() {
 
         Toast.makeText(this, "Please make UTDMer your default SMS application so that we can delete messages", Toast.LENGTH_LONG).show();
+        // Changes view if they don't allow permissions
         Intent intent =
                 new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
         intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME,

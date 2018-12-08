@@ -12,6 +12,8 @@
         android:layout_alignParentTop="true"
         android:orientation="horizontal"
         android:id="@+id/_search_layout">
+
+        <!-- for search query -->
         <EditText
 
             android:id="@+id/_search_text"
@@ -32,7 +34,7 @@
 
     </LinearLayout>
 
-
+    <!-- the messages that match search query -->
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -7,7 +7,7 @@
     tools:context=".ViewConversation">
 
 
-
+    <!-- conversation partner -->
     <TextView
         android:id="@+id/recipientText"
         android:layout_width="match_parent"

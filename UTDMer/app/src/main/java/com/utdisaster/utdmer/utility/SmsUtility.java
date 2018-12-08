@@ -25,10 +25,9 @@ public class SmsUtility {
     private static Context context;
     // ListView from mainActivity
     private static ListView messageView;
-    private static ListView conversationView;
     private static String address;
+    // A hashmap of address to messages
     private static HashMap<String, ArrayList<Sms>> conversations;
-
     private static final String TAG = SmsUtility.class.getName();
 
     public static void setContext(Context c) {
@@ -55,6 +54,7 @@ public class SmsUtility {
         SmsUtility.address = address;
     }
 
+    // This retrieves the Sms object from the cursor
     public static Sms parseSmsCursor(Cursor c) {
         Sms sms = new Sms();
         sms.setId(c.getString(c.getColumnIndexOrThrow("_id")));
@@ -72,6 +72,7 @@ public class SmsUtility {
 
         return sms;
     }
+    // Deletes a message from memory
     public static boolean deleteSmsFromMemory(int id) {
         try {
             // Delete message with matching id
@@ -82,6 +83,7 @@ public class SmsUtility {
             return false;
         }
     }
+    // Adds a new message to memory
     public static void addNewMessageToMemory(Sms sms) {
         Uri uri = null;
         ContentValues values = new ContentValues();
@@ -112,6 +114,7 @@ public class SmsUtility {
             Log.e(TAG, "Error saving message: " + sms);
         }
     }
+    // Retrieves all messsages in memory
     public static List<Sms> getAllMessagesInMemory(Context context){
         ContentResolver contentResolver = context.getContentResolver();
         // Request sms messages
@@ -137,6 +140,7 @@ public class SmsUtility {
         }
         return messages;
     }
+    // Sends a message using an sms manager
     public static void sendMessage(Sms sms) {
         SmsManager smsManager = SmsManager.getDefault();
         // Send message
@@ -144,7 +148,7 @@ public class SmsUtility {
         // Save message
         addNewMessageToMemory(sms);
     }
-
+    // Updates the inbox list view
     public static void updateInboxMessageView() {
 
         List<Sms> messageList = SmsUtility.getInboxMessages(context.getApplicationContext());
@@ -157,20 +161,17 @@ public class SmsUtility {
         }
 
     }
-
+    // Updates the conversation view using an ListView parameter
     public static void updateConversationMessageView(ListView cView){
-            conversationView = cView;
             List<Sms> conversationMessageList = SmsUtility.getMessagesInConversationByAddress(address);
+            // Update view if messages exist
             if(conversationMessageList!=null) {
                 ArrayAdapter arrayAdapter = new ArrayAdapter<>(context.getApplicationContext(), android.R.layout.simple_list_item_1, conversationMessageList);
-                conversationView.setAdapter(arrayAdapter);
+                cView.setAdapter(arrayAdapter);
             }
 
     }
-
-
-
-    // Get SMS messages
+    // Get SMS messages in the inbox
     public static List<Sms> getInboxMessages(Context context) {
         List<Sms> messages = getAllMessagesInMemory(context);
 
@@ -184,39 +185,45 @@ public class SmsUtility {
         return getRecentMessagesFromConversations();
 
     }
-
+    // Gets the most recent message from every conversation for inbox
     private static List<Sms> getRecentMessagesFromConversations() {
         ArrayList<Sms> recentMessages = new ArrayList<>();
+        // For every conversation add one message
         for(String address: conversations.keySet()){
             recentMessages.add(conversations.get(address).get(0));
         }
+
+        // Sort and order
         Collections.sort(recentMessages);
         Collections.reverse(recentMessages);
 
         return recentMessages;
     }
-
+    // Sorts messages by conversation
     private static void sortMessagesIntoConversations(List<Sms> messages){
         conversations = new HashMap<>();
+
+        // For every given message
         for(Sms message: messages){
             ArrayList<Sms> prevMessages;
 
+            // If the conversation already exists, retrieve the conversation messages
             if(conversations.containsKey(message.getAddress())){
                 prevMessages = conversations.get(message.getAddress());
-                prevMessages.add(message);
-                conversations.put(message.getAddress(), prevMessages);
             }
 
             else{
                 prevMessages = new ArrayList<Sms>();
-                prevMessages.add(message);
-                conversations.put(message.getAddress(), prevMessages);
             }
+
+            prevMessages.add(message);
+            conversations.put(message.getAddress(), prevMessages);
         }
     }
-
+    // Returns the messages related to given address
     public static List<Sms> getMessagesInConversationByAddress(String address){
         List<Sms> convoMess = conversations.get(address);
+        // Reverses because most recent should be at the bottom
         Collections.reverse(convoMess);
         return convoMess;
     }
