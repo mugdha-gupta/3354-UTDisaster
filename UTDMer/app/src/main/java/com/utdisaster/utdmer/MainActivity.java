@@ -1,8 +1,11 @@
 package com.utdisaster.utdmer;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.provider.Telephony;
 import android.support.design.widget.FloatingActionButton;
@@ -14,8 +17,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.utdisaster.utdmer.models.Sms;
@@ -26,10 +33,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class MainActivity extends AppCompatActivity {
 
+public class MainActivity extends AppCompatActivity {
+    public static final String SEARCH_MESSAGE = "com.utdisaster.utdmer.MESSAGE";
+    Dialog search;
     private View messageView;
     private ArrayAdapter<Sms> arrayAdapter;
+    public static final String EXTRA_MESSAGE = "com.utdisaster.utdmer.MESSAGE";
+
 
     // Enum to keep track of where the user is when they are requested sms permission
     enum RequestCode {
@@ -97,15 +108,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        SmsUtility.setContext(this.getApplicationContext());
+    protected void onStart() {super.onStart();
         ListView messageView = findViewById(R.id._messageView);
         SmsUtility.setMessageView(messageView);
+        SmsUtility.setAddress(null);
+        SmsUtility.setContext(this.getApplicationContext());
         // Request read permissions
         if(getSmsPermissions(RequestCode.APPLICATION_LAUNCH)) {
             // If granted, populate listview with messages
             SmsUtility.updateMessageView();
+
+            messageView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    // get selected message
+                    Sms selectedMessage = (Sms) parent.getItemAtPosition(position);
+
+                    // get address of selected message
+                    String addressSelected = selectedMessage.getAddress();
+
+                    // create intent to send address to view conversation activity
+                    Intent intent = new Intent(MainActivity.this, ViewConversation.class);
+                    intent.putExtra(EXTRA_MESSAGE, addressSelected);
+                    startActivity(intent);
+
+                }
+
+            });
         }
         else {
             // If not granted, explain to the user why there is nothing to see
@@ -121,14 +150,15 @@ public class MainActivity extends AppCompatActivity {
             requestDefaultSms();
         }
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        search = new Dialog(this);
         // Activate Fab
-        FloatingActionButton fab = findViewById(R.id.fab);
+
+        Button fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -144,6 +174,41 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+
+
+
+    public void showSearchList(View view) {
+        Intent intent = new Intent(this, SearchList.class);
+        EditText editText;
+
+        editText = search.findViewById(R.id.editSearch);
+        String message = editText.getText().toString();
+        intent.putExtra(SEARCH_MESSAGE, message);
+
+        startActivity(intent);
+    }
+
+    public void showSearch(View view){
+        TextView close;
+        Button searchB;
+        search.setContentView(R.layout.searchmessage);
+        close= search.findViewById(R.id.close);
+        searchB = search.findViewById(R.id.search);
+        close.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                search.dismiss();
+            }
+        });
+
+        search.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        search.show();
+    }
+
+
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

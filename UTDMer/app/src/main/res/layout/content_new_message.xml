@@ -1,41 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:background="@color/black">
+<!--Dark Design-->
+    <!--Delete Button-->
+    <Button
+        android:id="@+id/delete"
+        android:layout_width="90dp"
+        android:layout_height="28dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@color/red"
+        android:onClick="deleteDraft"
+        android:text="@string/delete"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.169" />
+
+    <!-- Get Draft Button -->
+    <Button
+        android:id="@+id/getDraftButton"
+        android:layout_width="90dp"
+        android:layout_height="40dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@color/orange"
+        android:onClick="getDraft"
+        android:text="@string/get_draft"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/relativeLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.085" />
+
     <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        >
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent">
+<!-- Save Draft Button -->
+        <Button
+            android:id="@+id/saveDraftButton"
+            android:layout_width="90dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="35dp"
+            android:background="@color/blue"
+            android:onClick="saveDraft"
+            android:text="@string/save_as_draft"
+            android:textColor="@color/white" />
+<!-- Text Field for phone number -->
         <MultiAutoCompleteTextView
             android:id="@+id/recipientField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLines="1"
             android:layout_alignParentTop="true"
             android:hint="@string/new_message_to"
-            />
+            android:maxLines="1"
+            android:textColorHint="@color/grey"
+            android:textColor="@color/white"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:orientation="horizontal">
+<!-- Text Field for messages -->
             <EditText
                 android:id="@+id/messageField"
-                android:layout_weight=".90"
-                android:layout_height="match_parent"
                 android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".90"
                 android:autofillHints="@string/new_message_text"
                 android:hint="@string/new_message_text"
                 android:inputType="text"
                 android:maxLines="4"
-                android:minLines="1" />
+                android:minLines="1"
+                android:textColorHint="@color/grey"
+                android:textColor="@color/white"/>
+<!-- Message send button -->
             <Button
                 android:id="@+id/sendNewMessage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/new_message_send" />
+                android:layout_width="90dp"
+                android:layout_height="40dp"
+                android:background="@color/green"
+                android:text="@string/new_message_send"
+                android:textColor="@color/white" />
 
         </LinearLayout>
 

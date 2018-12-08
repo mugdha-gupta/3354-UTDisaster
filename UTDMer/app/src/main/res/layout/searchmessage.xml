@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="350dp"
+    android:layout_height="200dp"
+    android:background="@color/black"
+    android:padding="5dp"
+    android:layout_gravity="center">
+
+    <!-- Search UI -->
+    <!-- Pop up from main activity with text field -->
+    <TextView
+        android:id="@+id/close"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="end"
+        android:gravity="center"
+        android:text="X"
+        android:textColor="@color/white" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/enterMessageTS"
+        android:textColor="@color/white" />
+
+    <EditText
+        android:id="@+id/editSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/enterMessage"
+        android:textColorHint="@color/grey"
+        android:inputType="textPersonName"
+        android:textColor="@color/white"/>
+
+    <Button
+        android:onClick="showSearchList"
+        android:id="@+id/search"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/buttonstyle"
+        android:text="@string/search"
+        android:textColor="@color/white" />
+
+
+</LinearLayout>
