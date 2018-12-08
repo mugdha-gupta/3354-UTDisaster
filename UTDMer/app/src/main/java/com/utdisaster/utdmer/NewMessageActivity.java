@@ -1,9 +1,9 @@
 package com.utdisaster.utdmer;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.telephony.SmsManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -16,7 +16,7 @@ import com.utdisaster.utdmer.utility.SmsUtility;
 import java.util.HashMap;
 
 public class NewMessageActivity extends AppCompatActivity {
-
+    public static final String EXTRA_MESSAGE = "com.utdisaster.utdmer.MESSAGE";
     Button sendButton, saveButton, getDraft;
     TextView messageField, recipientField;
     private static HashMap<String, String> hmap = new HashMap<>();
@@ -29,6 +29,10 @@ public class NewMessageActivity extends AppCompatActivity {
         messageField = findViewById(R.id.messageField);
         recipientField = findViewById(R.id.recipientField);
         sendButton = findViewById(R.id.sendNewMessage);
+
+        Intent intent = getIntent();
+        messageField.setText(intent.getStringExtra(EXTRA_MESSAGE));
+
 
         messageField.addTextChangedListener(new TextWatcher() {
             @Override

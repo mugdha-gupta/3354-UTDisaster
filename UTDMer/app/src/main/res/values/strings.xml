@@ -24,5 +24,7 @@
     <string name="sendto">. SEND TO:  </string>
     <string name="delete">DELETE X</string>
     <string name="sendMessage">Send Message</string>
+    <string name="action_forward">Forward</string>
+    <string name="action_delete">Delete</string>
 
 </resources>

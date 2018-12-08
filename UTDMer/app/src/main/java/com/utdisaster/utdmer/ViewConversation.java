@@ -4,9 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.utdisaster.utdmer.models.Sms;
@@ -34,6 +37,35 @@ public class ViewConversation extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         final ListView conversationView = findViewById(R.id._conversationView);
+        conversationView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // get selected message
+                final Sms selectedMessage = (Sms) parent.getItemAtPosition(position);
+                PopupMenu menu = new PopupMenu(ViewConversation.this, view);
+                menu.getMenuInflater().inflate(R.menu.message_menu, menu.getMenu());
+
+                menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch(item.getItemId()) {
+                            case R.id.message_forward:
+                                Intent intent = new Intent(ViewConversation.this, NewMessageActivity.class);
+                                intent.putExtra(EXTRA_MESSAGE, selectedMessage.getMsg());
+                                startActivity(intent);
+                                return true;
+                            case R.id.message_delete:
+                                boolean result = SmsUtility.deleteSmsFromMemory(Integer.valueOf(selectedMessage.getId()));
+                                SmsUtility.updateConversationMessageView(conversationView);
+                                return result;
+                        }
+                        return false;
+                    }
+                });
+                menu.show();
+            }
+
+        });
         SmsUtility.setAddress(address);
         SmsUtility.setContext(this.getApplicationContext());
         SmsUtility.updateConversationMessageView(conversationView);
