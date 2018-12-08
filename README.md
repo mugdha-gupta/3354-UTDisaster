@@ -17,3 +17,6 @@ Term project for software engineering
 1. Clone the repository 
 2. Open project in Android Studios
 3. Run project in emulator on on personal device
+
+## P3_DOC
+Is in /documentation
