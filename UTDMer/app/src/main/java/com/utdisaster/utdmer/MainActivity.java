@@ -8,11 +8,9 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.provider.Telephony;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -96,10 +94,10 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                     break;
                 case APPLICATION_LAUNCH:
-                    SmsUtility.updateMessageView();
+                    SmsUtility.updateInboxMessageView();
                     break;
                 case BROADCAST_RECEIVER:
-                    SmsUtility.updateMessageView();
+                    SmsUtility.updateInboxMessageView();
                     break;
                 default:
                     super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -116,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
         // Request read permissions
         if(getSmsPermissions(RequestCode.APPLICATION_LAUNCH)) {
             // If granted, populate listview with messages
-            SmsUtility.updateMessageView();
+            SmsUtility.updateInboxMessageView();
 
             messageView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override

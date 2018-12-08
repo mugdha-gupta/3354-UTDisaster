@@ -54,7 +54,7 @@ public class SearchList extends AppCompatActivity {
             public void onClick(View v) {
 
                 String searchString = message;
-                List<Sms> allMessages = SmsUtility.getAllMessages(getApplicationContext());
+                List<Sms> allMessages = SmsUtility.getAllMessagesInMemory(getApplicationContext());
 
                 if(searchResults != null){
                     searchResults = new ArrayList<>();

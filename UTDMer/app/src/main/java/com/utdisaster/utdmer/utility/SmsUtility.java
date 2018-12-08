@@ -21,11 +21,11 @@ import java.util.List;
 
 
 public class SmsUtility {
-    //    public static final String EXTRA_MESSAGE = "com.utdisaster.utdmer.MESSAGE";
     // Application context
     private static Context context;
     // ListView from mainActivity
     private static ListView messageView;
+    private static ListView conversationView;
     private static String address;
     private static HashMap<String, ArrayList<Sms>> conversations;
 
@@ -55,7 +55,24 @@ public class SmsUtility {
         SmsUtility.address = address;
     }
 
-    public static boolean deleteSms(int id) {
+    public static Sms parseSmsCursor(Cursor c) {
+        Sms sms = new Sms();
+        sms.setId(c.getString(c.getColumnIndexOrThrow("_id")));
+        sms.setAddress(c.getString(c
+                .getColumnIndexOrThrow("address")));
+        sms.setMsg(c.getString(c.getColumnIndexOrThrow("body")));
+        sms.setReadState(Boolean.valueOf(c.getString(c.getColumnIndex("read"))));
+        sms.setTime(new Timestamp(Long.valueOf(c.getString(c.getColumnIndexOrThrow("date")))));
+        // Sort sent messages vs received messages
+        if (c.getString(c.getColumnIndexOrThrow("type")).contains("1")) {
+            sms.setFolderName("inbox");
+        } else {
+            sms.setFolderName("sent");
+        }
+
+        return sms;
+    }
+    public static boolean deleteSmsFromMemory(int id) {
         try {
             // Delete message with matching id
             context.getContentResolver().delete(
@@ -65,38 +82,7 @@ public class SmsUtility {
             return false;
         }
     }
-
-    public static void sendMessage(Sms sms) {
-        SmsManager smsManager = SmsManager.getDefault();
-        // Send message
-        smsManager.sendTextMessage(sms.getAddress(), null, sms.getMsg(), null, null);
-        // Save message
-        addNewMessage(sms);
-    }
-
-    public static void updateMessageView() {
-        if(address == null) {
-            // Get list of messages
-            List<Sms> messageList = SmsUtility.getSmsInbox(context.getApplicationContext());
-            // Find message view
-            if (messageList != null) {
-                // Create adapter to display message
-                ArrayAdapter arrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, messageList);
-                // Replace message view with messages
-                messageView.setAdapter(arrayAdapter);
-            }
-        } else {
-            List<Sms> conversationMessageList = SmsUtility.getConversation(address);
-            Collections.reverse(conversationMessageList);
-            if(conversationMessageList!=null) {
-                ArrayAdapter arrayAdapter = new ArrayAdapter<>(context.getApplicationContext(), android.R.layout.simple_list_item_1, conversationMessageList);
-                messageView.setAdapter(arrayAdapter);
-            }
-        }
-
-    }
-
-    public static void addNewMessage(Sms sms) {
+    public static void addNewMessageToMemory(Sms sms) {
         Uri uri = null;
         ContentValues values = new ContentValues();
         values.put("address", sms.getAddress());
@@ -125,31 +111,14 @@ public class SmsUtility {
         } else {
             Log.e(TAG, "Error saving message: " + sms);
         }
+
+        getInboxMessages(context);
     }
-
-    public static Sms parseSmsCursor(Cursor c) {
-        Sms sms = new Sms();
-        sms.setId(c.getString(c.getColumnIndexOrThrow("_id")));
-        sms.setAddress(c.getString(c
-                .getColumnIndexOrThrow("address")));
-        sms.setMsg(c.getString(c.getColumnIndexOrThrow("body")));
-        sms.setReadState(Boolean.valueOf(c.getString(c.getColumnIndex("read"))));
-        sms.setTime(new Timestamp(Long.valueOf(c.getString(c.getColumnIndexOrThrow("date")))));
-        // Sort sent messages vs received messages
-        if (c.getString(c.getColumnIndexOrThrow("type")).contains("1")) {
-            sms.setFolderName("inbox");
-        } else {
-            sms.setFolderName("sent");
-        }
-
-        return sms;
-    }
-
-    public static List<Sms> getAllMessages(Context context){
+    public static List<Sms> getAllMessagesInMemory(Context context){
         ContentResolver contentResolver = context.getContentResolver();
         // Request sms messages
         Cursor smsCursor = contentResolver.query(Uri.parse("content://sms"), null, null, null, null);
-        ArrayList<Sms> messages = new ArrayList<>();
+        List<Sms> messages = new ArrayList<>();
 
         // process received sms
         if(smsCursor != null) {
@@ -168,40 +137,68 @@ public class SmsUtility {
         if(messages.isEmpty()){
             return null;
         }
-
-        Collections.sort(messages);
         return messages;
     }
+    public static void sendMessage(Sms sms) {
+        SmsManager smsManager = SmsManager.getDefault();
+        // Send message
+        smsManager.sendTextMessage(sms.getAddress(), null, sms.getMsg(), null, null);
+        // Save message
+        addNewMessageToMemory(sms);
+    }
+
+    public static void updateInboxMessageView() {
+
+        List<Sms> messageList = SmsUtility.getInboxMessages(context.getApplicationContext());
+        // Find message view
+        if (messageList != null) {
+            // Create adapter to display message
+            ArrayAdapter arrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, messageList);
+            // Replace message view with messages
+            messageView.setAdapter(arrayAdapter);
+        }
+
+    }
+
+    public static void updateConversationMessageView(ListView cView){
+            conversationView = cView;
+            List<Sms> conversationMessageList = SmsUtility.getMessagesInConversationByAddress(address);
+            if(conversationMessageList!=null) {
+                ArrayAdapter arrayAdapter = new ArrayAdapter<>(context.getApplicationContext(), android.R.layout.simple_list_item_1, conversationMessageList);
+                conversationView.setAdapter(arrayAdapter);
+            }
+
+    }
+
+
 
     // Get SMS messages
-    public static List<Sms> getSmsInbox(Context context) {
-        ContentResolver contentResolver = context.getContentResolver();
-        // Request sms messages
-        Cursor smsCursor = contentResolver.query(Uri.parse("content://sms"), null, null, null, null);
-        ArrayList<Sms> messages = new ArrayList<>();
+    public static List<Sms> getInboxMessages(Context context) {
+        List<Sms> messages = getAllMessagesInMemory(context);
 
-        // process received sms
-        if(smsCursor != null) {
-            // verify cursor is valid and in good state
-            int indexBody = smsCursor.getColumnIndex("body");
-            if (indexBody < 0 || !smsCursor.moveToFirst()) {
-                return null;
-            }
-            do {
-                // Parse cursor data to build sms obj
-                Sms sms = parseSmsCursor(smsCursor);
-                messages.add(sms);
-            } while (smsCursor.moveToNext());
-            smsCursor.close();
-        }
-        if(messages.isEmpty()){
-            return null;
-        }
         // Sort messages by timestamp
         Collections.sort(messages);
-        // Reverse list to display most recent message on top
+        // Most recent message first
         Collections.reverse(messages);
+        // Sort the messages and populate conversations hashmap
+        sortMessagesIntoConversations(messages);
 
+        return getRecentMessagesFromConversations();
+
+    }
+
+    private static List<Sms> getRecentMessagesFromConversations() {
+        ArrayList<Sms> recentMessages = new ArrayList<>();
+        for(String address: conversations.keySet()){
+            recentMessages.add(conversations.get(address).get(0));
+        }
+        Collections.sort(recentMessages);
+        Collections.reverse(recentMessages);
+
+        return recentMessages;
+    }
+
+    private static void sortMessagesIntoConversations(List<Sms> messages){
         conversations = new HashMap<>();
         for(Sms message: messages){
             ArrayList<Sms> prevMessages;
@@ -218,18 +215,11 @@ public class SmsUtility {
                 conversations.put(message.getAddress(), prevMessages);
             }
         }
-
-        ArrayList<Sms> recentMessages = new ArrayList<>();
-        for(String address: conversations.keySet()){
-            recentMessages.add(conversations.get(address).get(0));
-        }
-        Collections.sort(recentMessages);
-        Collections.reverse(recentMessages);
-
-        return recentMessages;
     }
 
-    public static List<Sms> getConversation(String address){
-        return conversations.get(address);
+    public static List<Sms> getMessagesInConversationByAddress(String address){
+        List<Sms> convoMess = conversations.get(address);
+        Collections.reverse(convoMess);
+        return convoMess;
     }
 }

@@ -1,14 +1,10 @@
 package com.utdisaster.utdmer.receiver;
 
 import android.content.BroadcastReceiver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.utdisaster.utdmer.models.Sms;
 import com.utdisaster.utdmer.utility.SmsUtility;
@@ -44,9 +40,9 @@ public class SmsReceiver extends BroadcastReceiver {
                 sms.setReadState(false);
                 sms.setTime(new Timestamp(System.currentTimeMillis()));
                 // Save message to device
-                SmsUtility.addNewMessage(sms);
+                SmsUtility.addNewMessageToMemory(sms);
                 // Update message list
-                SmsUtility.updateMessageView();
+                SmsUtility.updateInboxMessageView();
             }
         }
     }
