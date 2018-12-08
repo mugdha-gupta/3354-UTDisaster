@@ -48,6 +48,17 @@ public class ViewConversation extends AppCompatActivity {
                 menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
+                        switch(item.getItemId()) {
+                            case R.id.message_forward:
+                                Intent intent = new Intent(ViewConversation.this, NewMessageActivity.class);
+                                intent.putExtra(EXTRA_MESSAGE, selectedMessage.getMsg());
+                                startActivity(intent);
+                                return true;
+                            case R.id.message_delete:
+                                boolean result = SmsUtility.deleteSmsFromMemory(Integer.valueOf(selectedMessage.getId()));
+                                SmsUtility.updateConversationMessageView(conversationView);
+                                return result;
+                        }
                         return false;
                     }
                 });
