@@ -68,7 +68,7 @@ public class SmsUtilityTest {
     }
 
     @Test
-    public void testParseSmsCursor() {
+    public void testSentParseSmsCursor() {
         Cursor c = mock(Cursor.class);
         when(c.getColumnIndexOrThrow("_id")).thenReturn(0);
         when(c.getColumnIndexOrThrow("address")).thenReturn(1);
@@ -88,6 +88,31 @@ public class SmsUtilityTest {
         sms.setMsg("BODY");
         sms.setReadState(false);
         sms.setFolderName("sent");
+        sms.setTime(new Timestamp(0));
+        assertEquals(sms, SmsUtility.parseSmsCursor(c));
+    }
+
+    @Test
+    public void testInboxParseSmsCursor() {
+        Cursor c = mock(Cursor.class);
+        when(c.getColumnIndexOrThrow("_id")).thenReturn(0);
+        when(c.getColumnIndexOrThrow("address")).thenReturn(1);
+        when(c.getColumnIndexOrThrow("body")).thenReturn(2);
+        when(c.getColumnIndexOrThrow("read")).thenReturn(3);
+        when(c.getColumnIndexOrThrow("type")).thenReturn(4);
+        when(c.getColumnIndexOrThrow("date")).thenReturn(5);
+        when(c.getString(0)).thenReturn("0");
+        when(c.getString(1)).thenReturn("ADDRESS");
+        when(c.getString(2)).thenReturn("BODY");
+        when(c.getString(3)).thenReturn("0");
+        when(c.getString(4)).thenReturn("1");
+        when(c.getString(5)).thenReturn("0");
+        Sms sms = new Sms();
+        sms.setId("0");
+        sms.setAddress("ADDRESS");
+        sms.setMsg("BODY");
+        sms.setReadState(false);
+        sms.setFolderName("inbox");
         sms.setTime(new Timestamp(0));
         assertEquals(sms, SmsUtility.parseSmsCursor(c));
     }
