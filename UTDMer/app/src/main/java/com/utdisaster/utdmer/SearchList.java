@@ -29,7 +29,7 @@ public class SearchList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_list);
 
-
+        // get the search phrase
         Intent intent = getIntent();
         message = intent.getStringExtra(MainActivity.SEARCH_MESSAGE);
 
@@ -44,11 +44,11 @@ public class SearchList extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
+        // set the text to the search phrase
         searchEditText.setText(message);
 
 
-
+        // enables user to search again within search activity
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

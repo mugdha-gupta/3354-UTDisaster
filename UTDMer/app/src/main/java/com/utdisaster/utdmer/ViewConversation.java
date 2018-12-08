@@ -25,10 +25,12 @@ public class ViewConversation extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_conversation);
 
+        // get the address for the conversation to view
         Intent intent = getIntent();
         address = intent.getStringExtra(EXTRA_MESSAGE);
 
         recipientText = findViewById(R.id.recipientText);
+        // tells user who the conversation is with
         recipientText.setHint("Conversation with: " + address);
 
     }
@@ -42,9 +44,11 @@ public class ViewConversation extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // get selected message
                 final Sms selectedMessage = (Sms) parent.getItemAtPosition(position);
+                // inflates forward delete menu
                 PopupMenu menu = new PopupMenu(ViewConversation.this, view);
                 menu.getMenuInflater().inflate(R.menu.message_menu, menu.getMenu());
-
+                // if forward, opens new message activity with address filled out
+                // if delete, removes message from memory and updates conversation view
                 menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
@@ -66,10 +70,12 @@ public class ViewConversation extends AppCompatActivity {
             }
 
         });
-        SmsUtility.setAddress(address);
+
+        // updates conversation view on start
         SmsUtility.setContext(this.getApplicationContext());
         SmsUtility.updateConversationMessageView(conversationView);
 
+        // sends reply
         Button button = findViewById(R.id.sendNewMessage);
         button.setOnClickListener(new View.OnClickListener() {
             @Override

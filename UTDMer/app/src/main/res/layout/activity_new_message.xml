@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".NewMessageActivity">
 
+    <!-- Gets relevent content -->
     <include
         android:id="@+id/include"
         layout="@layout/content_new_message"
