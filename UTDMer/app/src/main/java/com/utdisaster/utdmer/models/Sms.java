@@ -1,6 +1,7 @@
 package com.utdisaster.utdmer.models;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 
 public class Sms implements Comparable<Sms> {
     private String id;
@@ -61,6 +62,25 @@ public class Sms implements Comparable<Sms> {
     @Override
     public int compareTo(Sms obj) {
         return this.time.compareTo(obj.getTime());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Sms sms = (Sms) o;
+        return readState == sms.readState &&
+                Objects.equals(id, sms.id) &&
+                Objects.equals(address, sms.address) &&
+                Objects.equals(msg, sms.msg) &&
+                Objects.equals(time, sms.time) &&
+                Objects.equals(folderName, sms.folderName);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id, address, msg, readState, time, folderName);
     }
 
     @Override
