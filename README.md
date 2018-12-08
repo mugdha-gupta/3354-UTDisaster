@@ -6,6 +6,8 @@ Term project for software engineering
 - Send Messages
 - Receive Messages
 - Reply to Messages
+- Delete Message
+- Forward Message
 - View Messages in a conversation view
 - Save drafts
 - View drafts
